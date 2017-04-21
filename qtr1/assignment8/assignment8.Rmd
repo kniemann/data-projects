@@ -1,0 +1,200 @@
+---
+title: "Assignment08"
+author: "Kevin Niemann"
+date: "December 1, 2015"
+output: html_document
+---
+```{r}
+require(ggplot2)
+require(class)
+require(ggthemes)
+require(dplyr)
+require(tidyr)
+require(broom)
+library(class)
+mydata = read.csv("C:/Users/kevin/Downloads/CollegeScorecard_Raw_Data/CollegeScorecard_Raw_Data/MERGED2013_PP.csv")
+#Count of colleges by degree length and region
+table(mydata$region, mydata$PREDDEG)
+
+#Categorize student graduation counts by degree name
+mydata2006 = read.csv("C:/Users/kevin/Downloads/CollegeScorecard_Raw_Data/CollegeScorecard_Raw_Data/MERGED2006_PP.csv")
+
+test <- mydata2006[, 62:99]
+test[test=="NULL"] <- NA
+test[, 1:38] <- sapply(test[, 1:38], function(x) as.numeric(as.character(x)) )
+avg = colMeans(test, na.rm=TRUE)
+
+avgDF <- data.frame(as.list(avg))
+
+sixYearCount <- mydata2006$OVERALL_YR6_N
+sixYearSum = sum(as.numeric(levels(sixYearCount))[sixYearCount], na.rm = TRUE)
+options("scipen" = 10)
+avgDF[2,] <- apply(avgDF[1,], 2, function(x) x*sixYearSum)
+
+avgDF
+
+
+#Determine distribution of costs by degree name
+bothCosts <- mydata[, 317:318]
+bothCosts[bothCosts=="NULL"] <- NA
+bothCosts[, 1:2] <- sapply(bothCosts[, 1:2], function(x) as.numeric(as.character(x)) )
+costs <- data.frame(rowSums(bothCosts, na.rm = TRUE))
+sumCost <- colSums(costs)
+
+#then weight by number of ugrads.
+ugradRaw <- mydata[, 291]
+ugradRaw[ugradRaw=="NULL"] <- NA
+ugradRaw <- sapply(ugradRaw, function(x) as.numeric(as.character(x)) )
+costs$ugradCount <- data.frame(ugradRaw)
+colnames(costs) <- c("Cost", "Count")
+weightedCosts <- costs$Cost * costs$Count
+
+totalSpend <- sum(weightedCosts, na.rm = TRUE)
+
+distCostsByDeg <- avgDF
+distCostsByDeg[2,] <- apply(distCostsByDeg[1,], 2, function(x) x*totalSpend)
+#nominal spending by degree name
+distCostsByDeg
+
+#Estimate students unemployed after graduation by degree name
+
+unemp <- mydata2006[, 1689]#count_nwne_p7
+unemp[unemp=="NULL"] <- NA
+unemp[unemp=="PrivacySuppressed"] <- NA
+unemp <- sapply(unemp, function(x) as.numeric(as.character(x)) )
+umempDF <- data.frame(unemp)
+sumUnemp <- sum(umempDF, na.rm=TRUE)
+
+unempByDeg <- avgDF
+unempByDeg[2,] <- apply(unempByDeg[1,], 2, function(x) x*sumUnemp)
+unempByDeg
+
+
+#Determine average salary by degree name
+
+meanEarn <- mydata2006[, 1691]
+meanEarn[meanEarn=="NULL"] <- NA
+meanEarn[meanEarn=="PrivacySuppressed"] <- NA
+meanEarn <- sapply(meanEarn, function(x) as.numeric(as.character(x)) )
+meanEarnDF <- data.frame(meanEarn)
+#Data is not available to track degree name to salary.
+
+```
+#####################
+#Study evaluation
+
+  #Study type and approach
+  This study focused on performing exploratory data analysis.
+  #Bias analysis: populations measured, access to scholarships, etc.
+  Much of the data features come only from students who filed for or received federal aid, and Title IV recipients. Many schools did not report particular data or it   is privacy suppressed.
+  #Hypothesis analysis
+  The authors of the study wanted to provide data analysis to support consumer choice, institutional benchmarking, and accountability.
+
+
+#Summary Analysis – Value-add
+    #Identify highest “value” in terms of (cost – salary) per     degree
+    #Identify highest “value” in terms of (cost – salary) per     college
+    #Estimate value error distribution (actual vs predicted)
+    
+```{r}
+
+#value by degree
+
+degSalary <- mydata2006[, 62:99]
+degSalary[degSalary=="NULL"] <- NA
+degSalary[, 1:38] <- sapply(degSalary[, 1:38], function(x) as.numeric(as.character(x)) )
+avg = colMeans(degSalary, na.rm=TRUE)
+
+avgDF <- data.frame(as.list(avg))
+
+degSalary$mn_earn_wne_p7 <- mydata2006[c("mn_earn_wne_p7","TUITIONFEE_IN")]
+
+#I don't see how this information is obtainable with the given data set.
+
+#value per college
+value <- mydata2006[c("INSTNM", "mn_earn_wne_p7","TUITIONFEE_IN")]
+value[value=="NULL"] <- NA
+value[value=="PrivacySuppressed"] <- NA
+value <- na.omit(value)
+value[-1] <- sapply(value[-1], function(x) as.numeric(as.character(x)) )
+
+value$rank <- value$TUITIONFEE_IN/value$mn_earn_wne_p7
+value <- value[order(value$rank),]
+head(value)
+#
+#Value error
+# I didn't use a regression model to calculate the value per college, so there is are no errors or residuals.
+
+```
+
+```{r}
+#Predictive model – Student graduation
+    #Evaluate the primary features that affect college program completion
+      #family income
+      #admission rate
+      #will predit graduation rate
+    #Develop a model to predict student graduation (free to use any model)
+
+
+combined <- mydata2006[,c("DEP_INC_AVG","ADM_RATE","C150_4")]
+combined[combined=="NULL"] <- NA
+combined[combined=="PrivacySuppressed"] <- NA
+combined <- sapply(combined, function(x) as.numeric(as.character(x)) )
+combinedDF <- data.frame(combined)
+combinedDFNA <- na.omit(combinedDF)
+infoGraph <- combinedDFNA
+
+combinedDFNA$grad <- factor(sapply(combinedDFNA[,3], function(x) x>= .5))
+#hmm <- combinedDFNA
+combinedDFNA <- combinedDFNA[,-3]
+
+
+
+testSet = c(1650:1691)
+test <- combinedDFNA[testSet,]
+actual = test
+test <- test[,-3]
+
+combinedDFNA <- combinedDFNA[-testSet,]
+label <- combinedDFNA$grad
+train <- combinedDFNA[,-3]
+
+
+modelGrad <- knn(train, test, label, k = 1)
+#modelGrad
+summary(modelGrad)
+#Makes a prediction from train/test data, 18 schools below 50% and 24 above 50% student graduation rate.
+summary(actual$grad)
+
+
+    #Evaluate model performance on training data with confusion matrix and ROC model
+
+confuseTable.km <- table(actual$grad, modelGrad)
+confuseTable.km
+
+```
+#Identify model error rate and how to handle false-negative, false-positive results
+
+Model guessed correctly on 2/3 cases (reading diagonally). There were 7 false negatives and 7 false positives.
+    
+
+#Results Presentation
+    #Summarize your approach, code segments, and results analysis in an (.Rmd) file.
+    #Create custom infographic poster to visualize your analysis results
+
+```{r}
+library(ggplot2)
+qplot(infoGraph$DEP_INC_AVG, infoGraph$ADM_RATE)
+
+qplot(infoGraph$DEP_INC_AVG, infoGraph$C150_4)
+
+#KNN model based on income and admission rates guessed 2/3
+
+df <- data.frame(x=train[,1], y=train[,2], class=label)
+df2 <- data.frame(x=test[1], y=test[2], class=c(rep("?",2)))
+colnames(df2) <- c("x", "y", "class")
+ggplot(rbind(df, df2), aes(x=x, y=y, col=class), main="Graduated more than 50% in six years(green)", xlab="Family income", ylab="Admission rate") + geom_point(size=6)
+
+````
+
+

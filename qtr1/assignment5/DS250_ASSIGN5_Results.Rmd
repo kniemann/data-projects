@@ -1,0 +1,496 @@
+---
+title: "DS250 - Introduction to Data Science"
+author: "Student Name"
+date: "November 3, 2015"
+output:  html_document
+---
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
+```{r, echo=FALSE, message=FALSE}
+rm(list=ls())
+
+library(RCurl)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(GGally)
+```
+
+# Assignment 5 - Core concepts in Statistics
+
+This assignment covers core concepts in data and descriptive and inferential statistics. Statistical analysis is one of the primary tools of a Data Scientist used in understanding data, testing validity, and making predictions.
+
+### The objectives of this assignment are:
+* Understand the types of data
+* Review core concepts in descriptive statistics
+* High level review of probability distributions
+* Practice making predictions using regression and probability
+
+
+***
+#### Question 1 - Types of Data
+**a**\. Describe some of the differences between qualitative and quantitative data:
+
+````
+
+````
+
+**b**\. Describe some of the differences between an interval and a ratio:
+
+````
+
+````
+
+**c**\. From the image below, identify the statistical data types in the departure table:
+
+![Flight Board](http://www.fairfaxunderground.com/forum/file.php?2,file=121346,filename=Flight_status.png)
+
+
+***
+#### Question 2 - Distributions
+**a**\. Central Tendency: Briefly describe the following measures:
+
+*    Mode
+*    Median
+*    Mean
+
+````
+
+````
+
+**b**\. Dispersion: Briefly describe the following measures:
+
+*    Range
+*    Variance
+*    Standard deviation
+
+````
+
+````
+
+**c**\. Using the following sequence, create a plot of the normal distribution with a mean = 0 and standard deviation = 1.  
+
+x <- seq(-5,3, 0.01)
+
+```{r}
+x <- seq(-5,3, 0.01)
+hx <- dnorm(x, mean=0, sd=1)
+plot(x, hx, type="l", lty=2, xlab="x value",
+  ylab="Density", main="Plot of Normal Distribution")
+```
+
+***
+#### Question 3 - Probabilities
+**a**\. Using the heart patient data in the 'processed.cleveland.data.txt' file: (link below)   
+(https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/heart-disease.names)  
+(https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data)  
+
+- separate the population into male and female groups  
+- calculate the mean and standard deviation for male cholesterol values  
+- create a histogram showing the distribution of male cholesterol values 
+
+```{r, echo=FALSE}    
+#       -- 1. #3  (age)       
+#       -- 2. #4  (sex)       
+#       -- 3. #9  (cp)        
+#       -- 4. #10 (trestbps)  
+#       -- 5. #12 (chol)      
+#       -- 6. #16 (fbs)   
+#       -- 7. #19 (restecg)   
+#       -- 8. #32 (thalach)   
+#       -- 9. #38 (exang)     
+#       -- 10. #40 (oldpeak)   
+#       -- 11. #41 (slope)     
+#       -- 12. #44 (ca)        
+#       -- 13. #51 (thal)      
+#       -- 14. #58 (num)       (the predicted attribute)      
+```
+
+
+```{r,echo=TRUE, warning=FALSE, message=FALSE}
+
+URL <- "https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data"
+x <- getURL(URL, ssl.verifypeer = FALSE)
+
+d <- read.csv(textConnection(x), header = FALSE)
+
+names(d) <- c('age','sex','cp','trestbps','chol','fbs','restecg','thalach','exang','oldpeak','slope','ca','thal','num')
+
+male <- tbl_df(d) %>% filter(sex == 1)
+female <- tbl_df(d) %>% filter(sex == 0)
+male %>% summarise(mean = mean(chol), sd = sd(chol))
+bins <- seq(from=min(male$chol), to=max(male$chol), by=(max(male$chol)-min(male$chol))/50 )
+```
+
+For male cholesterol, the mean, *mean(male\$chol)*, is `r mean(male$chol)` 
+and the standard deviation, *sd(male\$chol)* is `r sd(male$chol)`.
+
+```{r,echo=TRUE}
+# histogram
+male %>% ggplot(aes(chol)) + geom_histogram(breaks=bins)
+
+## histogram code using 'hist'
+# hist(male$chol, breaks=bins)
+
+```
+
+**b**\. Using **rnorm()**, create a normal distribution and compare the histogram of the male cholesterol against the simulated normal distribution. Are they the same? *(can also use dnorm())*
+
+*Using dnorm() rather than rnorm()*  
+
+```{r,echo=TRUE}
+
+ggplot(male, aes(chol)) + 
+     geom_histogram(aes(y=..density..),
+                    breaks = bins ,
+                    colour="black", 
+                    fill="white") +
+  stat_function(fun=dnorm, args=list(mean=mean(male$chol), sd=sd(male$chol)))+
+  labs(title="Percentage Distribution of Male Cholesterol vs. Normal Distribution",
+       y="Percentage") 
+```
+
+**Answer**: The plot suggests the distribution of male cholesterol is likely normal
+
+**c**\. Using **pnorm()**, determine the probability that a randomly chosen adult male has a cholesterol level of over 260.
+
+```{r,echo=TRUE}
+p = pnorm(q=260, mean = mean(male$chol), sd = sd(male$chol), lower.tail = FALSE)
+```
+
+**Answer**: The probability 'p' is `r p`.
+
+***
+#### Question 4 - Comparison
+**a**\. Load sample data file from: (http://www.openintro.org/stat/data/cdc.R)  
+*(use "source(file)" function to load external R data.)*
+
+```{r,echo=TRUE}
+source(file='http://www.openintro.org/stat/data/cdc.R')
+str(cdc)
+tc <- tbl_df(as.data.frame(cdc))
+tc$src <- 'cdc'
+
+```
+
+**b**\. Create a histogram plot of the weight values:
+
+```{r,echo=TRUE}
+r <- range(tc$weight)
+bins <- seq(from=r[1], to=r[2], by=(r[2]-r[1])/50 )
+ggplot(tc, aes(x=weight)) + geom_histogram(breaks=bins, colour="black", fill="white")
+tc %>% summarise(mean = mean(weight), sd = sd(weight))
+```
+
+**c**\. Create a new data frame (*young*) from the cdc data file containing individuals between the ages of (18 to 30).
+
+```{r,echo=TRUE}
+ty <- filter(tc, age >= 18, age <= 30)
+ty$src <- 'young'
+ty
+```
+
+**d**\. Use **sample()**, to collect 50 random sample values from the (young) data frame.
+
+```{r,echo=TRUE}
+ts <- sample_n(ty,50,replace=FALSE)
+ts$src <- 'sample'
+ts
+```
+
+**e**\. Describe the distribution of this sample?  
+How does it compare to the distribution of the population from which it was sampled from?
+
+```{r,echo=TRUE}
+tb <- bind_rows(ty,ts)
+
+tb %>% group_by(src) %>% summarise(avg=mean(weight), sd=sd(weight))
+ggplot(tb, aes(weight, fill = src)) + geom_density(alpha = 0.2)
+
+tb %>% group_by(src) %>% summarise(avg=mean(age), sd=sd(age))
+ggplot(tb, aes(age, fill = src)) + geom_density(alpha = 0.2)
+
+gender <- xtabs( ~ src + gender, data=tb)
+gender
+# percent males
+gender[,'m'] / (gender[,'m']+ gender[,'f'])
+```
+
+**f**\. Using **sample()**, create three separate sample collections for (10, 50, 100) samples and plot the histogram of these three data sets. How are they different?  
+
+*using the original cdc data, not the filtered 'young' data*
+
+```{r,echo=TRUE}
+ts10 <- sample_n(tc,10,replace=FALSE)
+ts10$src <- '10'
+ts50 <- sample_n(tc,50,replace=FALSE)
+ts50$src <- '50'
+ts100 <- sample_n(tc,100,replace=FALSE)
+ts100$src <- '100'
+
+tcb <- bind_rows(tc,ts10,ts50,ts100)
+tcb %>% group_by(src) %>% summarise(avg=mean(weight), sd=sd(weight))
+ggplot(tcb, aes(weight, fill = src)) + geom_density(alpha = 0.2)
+```
+
+***
+#### Question 5 - Confidence Intervals  
+Using the sample data from: (http://www.openintro.org/stat/data/cdc.R)  
+*(use "source()" to load an external file)*
+
+**a**\. Create a data frame with the height values from the cdc sample data.
+
+```{r,echo=TRUE}
+source(file='http://www.openintro.org/stat/data/cdc.R')
+th <- select(tc, height, src)
+th
+str(th)
+```
+
+**b**\. Create a sample data frame with 60 random samples of individual height values. Based on this sample data, what it the average height for these 60 individuals?
+
+```{r,echo=TRUE}
+th60 <- sample_n(th,60,replace=FALSE)
+th60$src <- 's60'
+th60
+bind_rows(th,th60) %>% group_by(src) %>% summarise(avg=mean(height), sd=sd(height))
+ggplot(bind_rows(th,th60), aes(height, fill = src)) + geom_density(alpha = 0.2)
+```
+
+**c**\. Calculate a confidence interval (upper, lower bounds) for the sample data.
+
+```{r,echo=TRUE}
+th60
+t <- t.test(th60$height)
+t
+t$conf.int
+x <- mean(th60$height) + c(-1,1)*qnorm(.975)*sd(th60$height)/sqrt(length(th60$height))
+x
+
+```
+
+**d**\. Write a short loop to create (50) separate sample sets and calculate the confidence intervals for each set. How do the confidence intervals change in the 50 samples?
+
+Let's create the samples and take a look at them using boxplots.
+```{r,echo=TRUE}
+
+td <- tbl_df(sample_n(th,60,replace=FALSE))
+td$i <- 1
+for (i in 2:50) 
+  {
+    ti <- tbl_df(sample_n(th,60,replace=FALSE))
+    ti$i <- if
+    td <- bind_rows(td,ti)
+  }
+td$i <- as.factor(td$i)
+```
+
+```{r}
+ggplot(data=td, aes(y=height, x=i)) + geom_boxplot() 
+
+```
+
+Now let's calculate the confidence intervals.  We'll find the mean and sd for the upper and lower confidence intervals for the 50 samples and then do a boxplot.
+
+```{r}
+df <- tbl_df(data.frame(matrix(ncol = 3, nrow = 50)))
+names(df) <- c('i','lower','upper')
+df
+for (i in 1:50)
+  {
+  slice_begin <- (i-1)*50 + 1
+  slice_end <- (i-1)*50+50
+  th60 <- slice(td,slice_begin:slice_end)
+#   t <- t.test(th60$height)
+  t <- mean(th60$height) + c(-1,1)*qnorm(.975)*sd(th60$height)/sqrt(length(th60$height))
+  df[i,'i'] <- i
+  df[i,'lower'] <- t[1]
+  df[i,'upper'] <- t[2]
+  }
+df
+df %>% summarise(avg=mean(lower), sd=sd(lower))
+df %>% summarise(avg=mean(upper), sd=sd(upper))
+
+dg <- df %>% gather('key','value',2:3)
+dg
+
+g<-ggplot(dg, aes(x=key, y=value))
+g+geom_boxplot(fill="darkseagreen4")
+
+df <- tbl_df(data.frame(matrix(ncol = 3, nrow = 50)))
+names(df) <- c('i','lower','upper')
+```
+
+***
+#### Question 6 - Inference  
+Use **"load()"** to import sample data file from: (http://www.openintro.org/stat/data/nc.RData) and complete the following:
+
+```{r}
+#rm(list = ls())
+load(url('http://www.openintro.org/stat/data/nc.RData'))
+```
+    
+**a**\. Review the attributes in this data set and determine which ones are categorical or numeric.
+
+```{r}
+# ls()
+str(nc)
+
+
+```
+
+**b**\. Create a side-by-side boxplot of habit and weight. What does the plot highlight about the relationship between these two variables?
+
+**The birth weight of children of smokers is slightly less than that of non-smokers.**
+
+```{r}
+library(ggplot2)
+tnc <- tbl_df(nc)
+g<-ggplot(tnc, aes(x=habit, y=weight))
+g+geom_boxplot(fill="darkseagreen4")
+```
+
+For curiosity, let's go one step further create some Violin plots, similar to box plots except we're using a kernel density to show where we have the most data. We'll rotate and add the jittered points -- a useful visualization. 
+
+```{r}
+
+g+geom_violin(alpha=0.5, color="gray")+geom_jitter(alpha=0.5, aes(color=habit),
+      position = position_jitter(width = 0.1))+coord_flip()
+```
+
+**c**\. Using the following statement to compare weight and habit. Is the difference between the mean of nonsmoker and that of smoker statistically significant?
+
+by(nc$weight, nc$habit, mean)
+
+```{r}
+by(nc$weight, nc$habit, mean)
+
+g1 <- tnc %>% filter(habit == 'smoker') %>% select(weight)
+g2 <- tnc %>% filter(habit == 'nonsmoker') %>% select(weight)
+t.test(g2$weight,g1$weight, paired=FALSE, var.equal=FALSE)$conf
+
+
+```
+
+0 is not within the 95% confidence interval, so we cannot reject the null hypothesis that the mean of nonsmoker and smoker are the same, so yes, the difference in means between the two groups is statistically significant.
+
+**d**\. Use the following statement to calculate the inference measure between weight and habit.
+
+inference(y = nc$weight, x = nc$habit, est = "mean", type = "ht", null = 0, alternative = "twosided", method = "theoretical")
+
+```{r,message=FALSE}
+inference(y = nc$weight, x = nc$habit, est = "mean", type = "ht", null = 0, alternative = "twosided", method = "theoretical")
+```
+
+**e**\. In the statement above, change the type argument to 'ci' to construct a confidence interval for the difference between the weights of babies born to smoking and non-smoking mothers.
+
+```{r,message=FALSE}
+inference(y = nc$weight, x = nc$habit, est = "mean", type = "ci", null = 0, alternative = "twosided", method = "theoretical")
+```
+
+Update the inference statement to order the results by "smoker","nonsmoker".
+
+```{r,message=FALSE}
+nc$habit <- factor(nc$habit, levels=rev(levels(nc$habit)))
+inference(y = nc$weight, x = nc$habit, est = "mean", type = "ci", null = 0, alternative = "twosided", method = "theoretical")
+```
+
+***
+#### Question 7 - Linear Regression  
+Load the sample data file from: (http://www.openintro.org/stat/data/mlb11.RData) and complete the following:
+
+```{r}
+rm(list = ls())
+load(url('http://www.openintro.org/stat/data/mlb11.RData'))
+```
+
+**a**\. Use the **cor()** function to determine the numeric relationship between 'runs' and 'at_bats'.
+
+```{r}
+cor(x=mlb11$at_bats,y=mlb11$runs)
+```
+
+**b**\. Use the custom function **plot_ss()** *(included in RData file)* to create a plot for:
+
+plot_ss(x = mlb11$at_bats, y = mlb11$runs, showSquares = TRUE)
+
+```{r}
+plot_ss(x = mlb11$at_bats, y = mlb11$runs, showSquares = TRUE)
+```
+
+**c**\. Review the mlb11 data set and select another variable that might be a good predictor of runs.
+
+```{r}
+ggcorr(mlb11[, -1],
+       label = TRUE,
+       label_alpha = TRUE,
+       name = "") +
+  ggplot2::theme(legend.position = "bottom")
+```
+
+**d**\. Create a scatterplot of the two variables and fit a linear model. Determine if there is a linear relationship?
+
+```{r}
+p <- ggplot(mlb11, aes(new_onbase, runs)) +
+   geom_point(colour="black", size = 4.5, show_guide = TRUE) +
+   geom_point(colour="pink", size = 4, show_guide = TRUE)
+ 
+# Plot12: Add linear model with confidence bands
+p + geom_smooth(method=lm)
+
+mlb11.lm <- lm(formula = runs ~ new_onbase, data = mlb11)
+summary(mlb11.lm)
+```
+
+As the p-value is much less than 0.05, we reject the null hypothesis that beta = 0. Hence there is a significant relationship between the variables in the linear regression model.
+
+***
+#### Question 8 - Linear Regression  
+Use the built-in dataset (*faithful*) and complete the following:
+
+a) Create a linear model *lm()* and capture the standard residuals :
+
+````{r}
+#install.packages("caret")
+library(caret)
+````
+
+````{r}
+data(faithful)
+set.seed(333)
+inTrain <- createDataPartition(y=faithful$waiting, p=0.5, list=FALSE)
+trainFaith <- faithful[inTrain,]
+testFaith  <- faithful[-inTrain,]
+head(trainFaith)
+````
+
+````{r}
+plot(trainFaith$waiting, trainFaith$eruptions, pch=19, col="blue", xlab="Waiting", ylab= "Duration")
+````
+
+````{r}
+fit <- lm(eruptions ~ waiting, data=trainFaith)
+eruption.stdres = rstandard(lm1) 
+summary(lm1)
+````
+
+````{r}
+plot(trainFaith$waiting, trainFaith$eruptions, pch=19, col="blue", xlab="Waiting", ylab= "Duration")
+lines(trainFaith$waiting, lm1$fitted, lwd=3)
+````
+
+
+b) Using *qqnorm()* create a normal probability plot with *qqline()* showing the comparison:
+
+````{r}
+qqnorm(eruption.stdres, 
+      ylab="Standardized Residuals", 
+      xlab="Normal Scores", 
+      main="Old Faithful Eruptions") 
+
+qqline(eruption.stdres) 
+````
+
+
+#### **End**

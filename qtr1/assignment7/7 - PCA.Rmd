@@ -1,0 +1,133 @@
+---
+title: "Intro to Machine Learning"
+date: "November 10, 2015"
+output:  html_document
+---
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
+```{r}
+rm( list = ls())  # Clear environment
+```
+
+# Lab 6.8 - Primary Component Analysis
+
+### Steps
+*  Extract the components and determine the number to retain
+*  Rotate the retained components
+*  Interpret the rotated solution
+*  Create the factor scores
+*  Use the scores as input variables for regression analysis
+
+````{r}
+# install.packages("compareGroups")
+# install.packages("FactoMineR")
+# install.packages("GPArotation")
+# install.packages("psych")
+
+library(corrplot)    #correlation plot
+library(FactoMineR)  #additional PCA analysis
+library(ggplot2)     #support scatterplot
+library(GPArotation) #supports rotation
+library(psych)       #PCA package
+````
+
+***
+## 1\. Primary Component Analysis
+
+#### a\. Load data
+
+```{r}
+url="http://textuploader.com/ae6t4/raw"
+nhl = as.data.frame(read.csv(url, header=FALSE))
+
+names(nhl) = c("rank","team","played","wins","losses","OTL","pts","ROW","HROW","RROW","ppc","gg","gag","five","PPP","PKP","shots","sag","sc1","tr1","lead1","lead2","wop","wosp","face")
+
+nhl=nhl[order(nhl$gg),]
+
+head(nhl,5)
+```
+
+```{r}
+pca.df = nhl[,c(-1:-11)]
+pca.df = as.data.frame(lapply(pca.df , as.numeric))
+str(pca.df)
+```
+
+```{r}
+nhl.cor = cor(pca.df)
+corrplot(nhl.cor, method="ellipse")
+```
+
+#### b\. Component Extraction
+
+```{r}
+pca = principal(pca.df, nfactors=5, rotate="none")
+pca
+```
+
+#### Plot variance
+
+```{r}
+ plot(pca$values, type="b", ylab="Eigenvalues", xlab="Component")
+```
+
+#### b\. Component Extraction
+
+```{r}
+pca.rotate = principal(pca.df, nfactors=3, rotate = "varimax")
+pca.rotate
+```
+
+```{r}
+pca.scores = pca.rotate$scores
+pca.scores = as.data.frame(pca.scores)
+pca.scores
+```
+
+
+#### Data
+
+```{r}
+nhl$pts = as.numeric(nhl$pts)
+nhl$Def = pca.scores$PC1
+nhl$Off = pca.scores$PC3
+nhl$PPlay = pca.scores$PC2
+```
+
+
+***
+## 2\. Regression Analysis
+
+#### a\. Load data
+
+```{r}
+nhl.lm = lm(pts~Def+Off+PPlay, data=nhl)
+summary(nhl.lm)
+```
+
+```{r}
+nhl.lm2 = lm(pts~Def+Off, data=nhl)
+summary(nhl.lm2)
+```
+
+#### Plot results
+
+```{r}
+plot(nhl.lm2$fitted.values, nhl$pts, main="Predicted versus Actual",xlab="Predicted",ylab="Actual")
+```
+
+
+#### Tune model
+
+```
+nhl$pred = nhl.lm2$fitted.values
+nhl=nhl[order(-nhl$pts),]
+nhl.best = nhl[1:15,]
+```
+
+```{r}
+ p = ggplot(nhl.best, aes(x=pred, y=pts, label=team))
+```
+
+#### **End**

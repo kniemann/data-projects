@@ -1,0 +1,512 @@
+##
+##--------------------------------------------
+##-----Load Libraries-----
+require(logging)
+calculateWins = function(trialCount) {
+doors <- c("Door1","Door2", "Door3")
+wins=c()
+for(i in 1:trialCount) {
+prize <- sample(doors)[1]
+pick <- sample(doors)[1]
+open <- sample(doors[which(doors != pick & doors != prize)])[1]
+switchyes <-doors[which(doors != pick & doors != open)]
+if(pick == prize){
+wins=c(wins,"noswitchwin")
+}
+if(switchyes == prize) {
+wins = c(wins, "switchwin")
+}
+}
+return (c(length(which(wins == "switchwin")),length(which(wins == "noswitchwin"))))
+}
+#calculateWins(100000)
+if (interactive()){
+# Set logging information
+basicConfig()
+addHandler(writeToFile, logger="data_logger", file="file_log.log")
+# Set working director and load data
+loginfo("Setting wd and loading data.", logger="data_logger")
+setwd('C:/Users/kevin/Google Drive/datasci/hw2')
+trialCount <- readline("Enter the number of trials to test: ")
+wins <- calculateWins(trialCount)
+loginfo((paste('After running', trialCount,'trials, there were', wins[1],'switch wins and', wins[2],'stay wins.')),logger="data_logger")
+}
+##--------------------------------------------
+##
+## Assignment 2
+##
+## Class: PCE Data Science Methods Class
+##
+## Author: Kevin Niemann
+##
+##--------------------------------------------
+##-----Load Libraries-----
+require(logging)
+calculateWins = function(trialCount) {
+doors <- c("Door1","Door2", "Door3")
+wins=c()
+for(i in 1:trialCount) {
+prize <- sample(doors)[1]
+pick <- sample(doors)[1]
+open <- sample(doors[which(doors != pick & doors != prize)])[1]
+switchyes <-doors[which(doors != pick & doors != open)]
+if(pick == prize){
+wins=c(wins,"noswitchwin")
+}
+if(switchyes == prize) {
+wins = c(wins, "switchwin")
+}
+}
+return (c(length(which(wins == "switchwin")),length(which(wins == "noswitchwin"))))
+}
+#calculateWins(100000)
+if (interactive()){
+# Set logging information
+basicConfig()
+addHandler(writeToFile, logger="data_logger", file="file_log.log")
+# Set working director and load data
+loginfo("Setting wd and loading data.", logger="data_logger")
+setwd('C:/Users/kevin/Google Drive/datasci/hw2')
+trialCount <- readline("Enter the number of trials to test: ")
+wins <- calculateWins(trialCount)
+loginfo((paste('After running', trialCount,'trials, there were', wins[1],'switch wins and', wins[2],'stay wins.')),logger="data_logger")
+}
+##--------------------------------------------
+##
+## Assignment 2
+##
+## Class: PCE Data Science Methods Class
+##
+## Author: Kevin Niemann
+##
+##--------------------------------------------
+##-----Load Libraries-----
+require(logging)
+calculateWins = function(trialCount) {
+doors <- c("Door1","Door2", "Door3")
+wins=c()
+for(i in 1:trialCount) {
+prize <- sample(doors)[1]
+pick <- sample(doors)[1]
+open <- sample(doors[which(doors != pick & doors != prize)])[1]
+switchyes <-doors[which(doors != pick & doors != open)]
+if(pick == prize){
+wins=c(wins,"noswitchwin")
+}
+if(switchyes == prize) {
+wins = c(wins, "switchwin")
+}
+}
+return (c(length(which(wins == "switchwin")),length(which(wins == "noswitchwin"))))
+}
+#calculateWins(100000)
+if (interactive()){
+# Set logging information
+basicConfig()
+addHandler(writeToFile, logger="data_logger", file="file_log.log")
+# Set working director and load data
+loginfo("Setting wd and loading data.", logger="data_logger")
+setwd('C:/Users/kevin/Google Drive/datasci/hw2')
+trialCount <- readline("Enter the number of trials to test: ")
+wins <- calculateWins(trialCount)
+loginfo((paste('After running', trialCount,'trials, there were', wins[1],'switch wins and', wins[2],'stay wins.')),logger="data_logger")
+}
+##
+## Assignment 2
+##
+## Class: PCE Data Science Methods Class
+##
+## Author: Kevin Niemann
+##
+##--------------------------------------------
+##-----Load Libraries-----
+require(logging)
+calculateWins = function(trialCount) {
+doors <- c("Door1","Door2", "Door3")
+wins=c()
+for(i in 1:trialCount) {
+prize <- sample(doors)[1]
+pick <- sample(doors)[1]
+open <- sample(doors[which(doors != pick & doors != prize)])[1]
+switchyes <-doors[which(doors != pick & doors != open)]
+if(pick == prize){
+wins=c(wins,"noswitchwin")
+}
+if(switchyes == prize) {
+wins = c(wins, "switchwin")
+}
+}
+return (c(length(which(wins == "switchwin")),length(which(wins == "noswitchwin"))))
+}
+#calculateWins(100000)
+if (interactive()){
+# Set logging information
+basicConfig()
+addHandler(writeToFile, logger="data_logger", file="file_log.log")
+# Set working director and load data
+loginfo("Setting wd and loading data.", logger="data_logger")
+setwd('C:/Users/kevin/Google Drive/datasci/hw2')
+trialCount <- readline("Enter the number of trials to test: ")
+wins <- calculateWins(trialCount)
+loginfo((paste('After running', trialCount,'trials, there were', wins[1],'switch wins and', wins[2],'stay wins.')),logger="data_logger")
+}
+proc.time()
+proc.time()$user
+proc.time()
+system.time()
+?system.time()
+sys.time()
+Sys.time)
+Sys.time()
+##--------------------------------------------
+##
+## Assignment 2
+##
+## Class: PCE Data Science Methods Class
+##
+## Author: Kevin Niemann
+##
+##--------------------------------------------
+##-----Load Libraries-----
+require(logging)
+calculateWins = function(trialCount) {
+loginfo((paste('Calculating wins at ', Sys.time())),logger="data_logger")
+ptm <- proc.time()
+doors <- c("Door1","Door2", "Door3")
+wins=c()
+for(i in 1:trialCount) {
+prize <- sample(doors)[1]
+pick <- sample(doors)[1]
+open <- sample(doors[which(doors != pick & doors != prize)])[1]
+switchyes <-doors[which(doors != pick & doors != open)]
+if(pick == prize){
+wins=c(wins,"noswitchwin")
+}
+if(switchyes == prize) {
+wins = c(wins, "switchwin")
+}
+}
+loginfo((paste('Completed calculations at', Sys.time())),'with duration of ',proc.time() - ptm,logger="data_logger")
+return (c(length(which(wins == "switchwin")),length(which(wins == "noswitchwin"))))
+}
+#calculateWins(100000)
+if (interactive()){
+# Set logging information
+basicConfig()
+addHandler(writeToFile, logger="data_logger", file="file_log.log")
+# Set working director and load data
+loginfo("Setting wd and loading data.", logger="data_logger")
+setwd('C:/Users/kevin/Google Drive/datasci/hw2')
+trialCount <- readline("Enter the number of trials to test: ")
+wins <- calculateWins(trialCount)
+loginfo((paste('After running', trialCount,'trials, there were', wins[1],'switch wins and', wins[2],'stay wins.')),logger="data_logger")
+}
+##--------------------------------------------
+##
+## Assignment 2
+##
+## Class: PCE Data Science Methods Class
+##
+## Author: Kevin Niemann
+##
+##--------------------------------------------
+##-----Load Libraries-----
+require(logging)
+calculateWins = function(trialCount) {
+loginfo((paste('Calculating wins at ', Sys.time())),logger="data_logger")
+ptm <- proc.time()
+doors <- c("Door1","Door2", "Door3")
+wins=c()
+for(i in 1:trialCount) {
+prize <- sample(doors)[1]
+pick <- sample(doors)[1]
+open <- sample(doors[which(doors != pick & doors != prize)])[1]
+switchyes <-doors[which(doors != pick & doors != open)]
+if(pick == prize){
+wins=c(wins,"noswitchwin")
+}
+if(switchyes == prize) {
+wins = c(wins, "switchwin")
+}
+}
+loginfo((paste('Completed calculations at', Sys.time(),'with duration of ',proc.time() - ptm)),logger="data_logger")
+return (c(length(which(wins == "switchwin")),length(which(wins == "noswitchwin"))))
+}
+#calculateWins(100000)
+if (interactive()){
+# Set logging information
+basicConfig()
+addHandler(writeToFile, logger="data_logger", file="file_log.log")
+# Set working director and load data
+loginfo("Setting wd and loading data.", logger="data_logger")
+setwd('C:/Users/kevin/Google Drive/datasci/hw2')
+trialCount <- readline("Enter the number of trials to test: ")
+wins <- calculateWins(trialCount)
+loginfo((paste('After running', trialCount,'trials, there were', wins[1],'switch wins and', wins[2],'stay wins.')),logger="data_logger")
+}
+ptm <- proc.time()
+proc.time() - ptm
+##--------------------------------------------
+##
+## Assignment 2
+##
+## Class: PCE Data Science Methods Class
+##
+## Author: Kevin Niemann
+##
+##--------------------------------------------
+##-----Load Libraries-----
+require(logging)
+calculateWins = function(trialCount) {
+loginfo((paste('Calculating wins at ', Sys.time())),logger="data_logger")
+ptm <- proc.time()
+doors <- c("Door1","Door2", "Door3")
+wins=c()
+for(i in 1:trialCount) {
+prize <- sample(doors)[1]
+pick <- sample(doors)[1]
+open <- sample(doors[which(doors != pick & doors != prize)])[1]
+switchyes <-doors[which(doors != pick & doors != open)]
+if(pick == prize){
+wins=c(wins,"noswitchwin")
+}
+if(switchyes == prize) {
+wins = c(wins, "switchwin")
+}
+}
+loginfo((paste('Completed calculations at', Sys.time(),'with duration of ',proc.time() - ptm)),logger="data_logger")
+return (c(length(which(wins == "switchwin")),length(which(wins == "noswitchwin"))))
+}
+#calculateWins(100000)
+if (interactive()){
+# Set logging information
+basicConfig()
+addHandler(writeToFile, logger="data_logger", file="file_log.log")
+# Set working director and load data
+loginfo("Setting wd and loading data.", logger="data_logger")
+setwd('C:/Users/kevin/Google Drive/datasci/hw2')
+trialCount <- readline("Enter the number of trials to test: ")
+wins <- calculateWins(trialCount)
+loginfo((paste('After running', trialCount,'trials, there were', wins[1],'switch wins and', wins[2],'stay wins.')),logger="data_logger")
+}
+ptm <- proc.time()
+proc.time() - ptm
+test <- proc.time() - ptm
+test
+test[3]
+(proc.time() - ptm)[3]
+##--------------------------------------------
+##
+## Assignment 2
+##
+## Class: PCE Data Science Methods Class
+##
+## Author: Kevin Niemann
+##
+##--------------------------------------------
+##-----Load Libraries-----
+require(logging)
+calculateWins = function(trialCount) {
+loginfo((paste('Calculating wins at ', Sys.time())),logger="data_logger")
+ptm <- proc.time()
+doors <- c("Door1","Door2", "Door3")
+wins=c()
+for(i in 1:trialCount) {
+prize <- sample(doors)[1]
+pick <- sample(doors)[1]
+open <- sample(doors[which(doors != pick & doors != prize)])[1]
+switchyes <-doors[which(doors != pick & doors != open)]
+if(pick == prize){
+wins=c(wins,"noswitchwin")
+}
+if(switchyes == prize) {
+wins = c(wins, "switchwin")
+}
+}
+loginfo((paste('Completed calculations at', Sys.time(),'with duration of ',(proc.time() - ptm)[3])),logger="data_logger")
+return (c(length(which(wins == "switchwin")),length(which(wins == "noswitchwin"))))
+}
+#calculateWins(100000)
+if (interactive()){
+# Set logging information
+basicConfig()
+addHandler(writeToFile, logger="data_logger", file="file_log.log")
+# Set working director and load data
+loginfo("Setting wd and loading data.", logger="data_logger")
+setwd('C:/Users/kevin/Google Drive/datasci/hw2')
+trialCount <- readline("Enter the number of trials to test: ")
+wins <- calculateWins(trialCount)
+loginfo((paste('After running', trialCount,'trials, there were', wins[1],'switch wins and', wins[2],'stay wins.')),logger="data_logger")
+}
+##--------------------------------------------
+##
+## Assignment 2
+##
+## Class: PCE Data Science Methods Class
+##
+## Author: Kevin Niemann
+##
+##--------------------------------------------
+##-----Load Libraries-----
+require(logging)
+calculateWins = function(trialCount) {
+loginfo((paste('Calculating wins at ', Sys.time())),logger="data_logger")
+ptm <- proc.time()
+doors <- c("Door1","Door2", "Door3")
+wins=c()
+for(i in 1:trialCount) {
+prize <- sample(doors)[1]
+pick <- sample(doors)[1]
+open <- sample(doors[which(doors != pick & doors != prize)])[1]
+switchyes <-doors[which(doors != pick & doors != open)]
+if(pick == prize){
+wins=c(wins,"noswitchwin")
+}
+if(switchyes == prize) {
+wins = c(wins, "switchwin")
+}
+}
+loginfo((paste('Completed calculations at', Sys.time(),'with duration of',(proc.time() - ptm)[3], 'seconds.')),logger="data_logger")
+return (c(length(which(wins == "switchwin")),length(which(wins == "noswitchwin"))))
+}
+#calculateWins(100000)
+if (interactive()){
+# Set logging information
+basicConfig()
+addHandler(writeToFile, logger="data_logger", file="file_log.log")
+# Set working director and load data
+loginfo("Setting wd and loading data.", logger="data_logger")
+setwd('C:/Users/kevin/Google Drive/datasci/hw2')
+trialCount <- readline("Enter the number of trials to test: ")
+wins <- calculateWins(trialCount)
+loginfo((paste('After running', trialCount,'trials, there were', wins[1],'switch wins and', wins[2],'stay wins.')),logger="data_logger")
+}
+##--------------------------------------------
+##
+## Assignment 2
+##
+## Class: PCE Data Science Methods Class
+##
+## Author: Kevin Niemann
+##
+##--------------------------------------------
+##-----Load Libraries-----
+require(logging)
+calculateWins = function(trialCount) {
+loginfo((paste('Calculating wins at ', Sys.time())),logger="data_logger")
+ptm <- proc.time()
+doors <- c("Door1","Door2", "Door3")
+wins=c()
+for(i in 1:trialCount) {
+prize <- sample(doors)[1]
+pick <- sample(doors)[1]
+open <- sample(doors[which(doors != pick & doors != prize)])[1]
+switchyes <-doors[which(doors != pick & doors != open)]
+if(pick == prize){
+wins=c(wins,"noswitchwin")
+}
+if(switchyes == prize) {
+wins = c(wins, "switchwin")
+}
+}
+loginfo((paste('Completed calculations at', Sys.time(),'with duration of',(proc.time() - ptm)[3], 'seconds.')),logger="data_logger")
+return (c(length(which(wins == "switchwin")),length(which(wins == "noswitchwin"))))
+}
+#calculateWins(100000)
+if (interactive()){
+# Set logging information
+basicConfig()
+addHandler(writeToFile, logger="data_logger", file="file_log.log")
+# Set working director and load data
+loginfo("Setting wd and loading data.", logger="data_logger")
+setwd('C:/Users/kevin/Google Drive/datasci/hw2')
+trialCount <- readline("Enter the number of trials to test: ")
+wins <- calculateWins(trialCount)
+loginfo((paste('After running', trialCount,'trials, there were', wins[1],'switch wins and', wins[2],'stay wins.')),logger="data_logger")
+}
+##--------------------------------------------
+##
+## Assignment 2
+##
+## Class: PCE Data Science Methods Class
+##
+## Author: Kevin Niemann
+##
+##--------------------------------------------
+##-----Load Libraries-----
+require(logging)
+calculateWins = function(trialCount) {
+loginfo((paste('Calculating wins at', Sys.time())),logger="data_logger")
+ptm <- proc.time()
+doors <- c("Door1","Door2", "Door3")
+wins=c()
+for(i in 1:trialCount) {
+prize <- sample(doors)[1]
+pick <- sample(doors)[1]
+open <- sample(doors[which(doors != pick & doors != prize)])[1]
+switchyes <-doors[which(doors != pick & doors != open)]
+if(pick == prize){
+wins=c(wins,"noswitchwin")
+}
+if(switchyes == prize) {
+wins = c(wins, "switchwin")
+}
+}
+loginfo((paste('Completed calculations at', Sys.time(),'with duration of',(proc.time() - ptm)[3], 'seconds.')),logger="data_logger")
+return (c(length(which(wins == "switchwin")),length(which(wins == "noswitchwin"))))
+}
+#calculateWins(100000)
+if (interactive()){
+# Set logging information
+basicConfig()
+addHandler(writeToFile, logger="data_logger", file="file_log.log")
+# Set working director and load data
+loginfo("Setting wd and loading data.", logger="data_logger")
+setwd('C:/Users/kevin/Google Drive/datasci/hw2')
+trialCount <- readline("Enter the number of trials to test: ")
+wins <- calculateWins(trialCount)
+loginfo((paste('After running', trialCount,'trials, there were', wins[1],'switch wins and', wins[2],'stay wins.')),logger="data_logger")
+}
+##--------------------------------------------
+##
+## Assignment 2
+##
+## Class: PCE Data Science Methods Class
+##
+## Author: Kevin Niemann
+##
+##--------------------------------------------
+##-----Load Libraries-----
+require(logging)
+calculateWins = function(trialCount) {
+loginfo((paste('Calculating wins at', Sys.time())),logger="data_logger")
+ptm <- proc.time()
+doors <- c("Door1","Door2", "Door3")
+wins=c()
+for(i in 1:trialCount) {
+prize <- sample(doors)[1]
+pick <- sample(doors)[1]
+open <- sample(doors[which(doors != pick & doors != prize)])[1]
+switchyes <-doors[which(doors != pick & doors != open)]
+if(pick == prize){
+wins=c(wins,"noswitchwin")
+}
+if(switchyes == prize) {
+wins = c(wins, "switchwin")
+}
+}
+loginfo((paste('Completed calculations at', Sys.time(),'with duration of',(proc.time() - ptm)[3], 'seconds.')),logger="data_logger")
+return (c(length(which(wins == "switchwin")),length(which(wins == "noswitchwin"))))
+}
+#calculateWins(100000)
+if (interactive()){
+# Set logging information
+basicConfig()
+addHandler(writeToFile, logger="data_logger", file="file_log.log")
+# Set working director and load data
+loginfo("Setting wd and loading data.", logger="data_logger")
+setwd('C:/Users/kevin/Google Drive/datasci/hw2')
+trialCount <- readline("Enter the number of trials to test: ")
+wins <- calculateWins(trialCount)
+loginfo((paste('After running', trialCount,'trials, there were', wins[1],'switch wins and', wins[2],'stay wins.')),logger="data_logger")
+}

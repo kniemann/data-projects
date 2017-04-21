@@ -1,0 +1,92 @@
+require(rnn)
+install.packages("rnn")
+q()
+setwd("C:/Users/chq-kevinni/Google Drive/qtr3/hw5")
+video_store <- read.csv(video_store.csv)
+setwd("C:/Users/kevin/Google Drive/datasci/qtr3/hw5")
+video_store <- read.csv(video_store.csv)
+video_store <- read.csv(video_store.csv)
+video_store <- read.csv(Video_Store.csv)
+setwd("C:/Users/kevin/Google Drive/datasci/qtr3/hw5")
+video_store <- read.csv(Video_Store.csv)
+setwd("C:/Users/kevin/Google Drive/datasci/qtr3/hw5")
+video_store <- read.csv("Video_Store.csv")
+View(video_store)
+View(video_store)
+setwd("C:/Users/kevin/Google Drive/datasci/qtr3/hw5")
+video_store <- read.csv("Video_Store.csv")
+setwd("C:/Users/kevin/Google Drive/datasci/qtr3/hw5")
+video_store <- read.csv("Video_store_Results_dataset.csv")
+View(video_store)
+View(video_store)
+video_store$Cust.ID = NULL
+View(video_store)
+View(video_store)
+View(video_store)
+setwd("C:/Users/kevin/Google Drive/datasci/qtr3/hw5")
+video_store <- read.csv("Video_store_Results_dataset.csv")
+video_store$Cust.ID = NULL
+video_store$Gender = NULL
+video_store$Genre = NULL
+video_store$Incidentals = NULL
+?cr
+?cor
+x <- mtcars[1:3]
+y <- mtcars[4:6]
+cor(x, y)
+x <- video_store[1:3]
+y <- video_store[4:6]
+cor(x, y)
+x <- video_store[1:6]
+y <- video_store[1:6]
+cor(x, y)
+x
+correction <- cor(x, y)
+View(correction)
+correlation <- cor(x, y)
+correction = NULL
+table(video_store)
+table(video_store$Gender..2.)
+setwd("C:/Users/kevin/Google Drive/datasci/qtr3/hw5")
+table(video_store$Gender..2.,video_store$Genre..2.)
+table(video_store$Genre..2.,video_store$Gender..2.)
+cross_tab <- table(video_store$Genre..2.,video_store$Gender..2.)
+plot(cross_tab)
+video_store <- read.csv("Video_store_Results_dataset.csv")
+cross_tab <- table(video_store$Genre,video_store$Gender)
+table(video_store$Genre,video_store$Gender)
+plot(cross_tab)
+require(ggplot2)
+qplot(cross_tab)
+plot(cross_tab)
+summary(video_store)
+video_store <- read.csv("Video_store_Results_dataset.csv")
+cross_tab <- table(video_store$Genre,video_store$Gender)
+plot(cross_tab)
+summary(video_store)
+correlation <- cor(x, y)
+setwd("C:/Users/kevin/Google Drive/datasci/qtr3/hw5")
+video_store <- read.csv("Video_store_Results_dataset.csv")
+video_store$Cust.ID = NULL
+video_store$Gender = NULL
+video_store$Genre = NULL
+video_store$Incidentals = NULL
+x <- video_store[1:6]
+y <- video_store[1:6]
+correlation <- cor(x, y)
+cor(x, y)
+summary(video_store)
+video_store[video_store$Rentals > 30]
+video_store[Rentals > 30]
+video_store[video_store$Rentals > 30,]
+good_customers <- video_store[video_store$Rentals > 30,]
+summary(good_customers)
+summary(video_store) - summary(good_customers)
+good_customers
+video_store <- read.csv("Video_store_Results_dataset.csv")
+setwd("C:/Users/kevin/Google Drive/datasci/qtr3/hw5")
+video_store <- read.csv("Video_store_Results_dataset.csv")
+head(infert)
+infert
+library(neuralnet)
+install.packages("neuralnet")

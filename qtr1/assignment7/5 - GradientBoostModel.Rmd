@@ -1,0 +1,122 @@
+---
+title: "Intro to Machine Learning"
+date: "November 10, 2015"
+output:  html_document
+---
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
+```{r}
+rm( list = ls())  # Clear environment
+```
+
+# Lab 6.5 - Gradient Boosted Models
+
+````{r}
+# Load required libraries
+
+library(gbm)            #gradient boosting
+library(caret)          #tune hyper-parameters
+library(ElemStatLearn)  #prostate data
+library(MASS)
+````
+
+***
+## 1\. Boosted Gradient Regression
+
+#### a\. Boosting elements:  number of trees, interaction depth, and shrinkage. Use caret to create input parameter grid for comparison.
+
+````{r}
+data(prostate)
+prostate$gleason = ifelse(prostate$gleason == 6, 0, 1)
+pros.train = subset(prostate, train==TRUE)[,1:9]
+pros.test = subset(prostate, train==FALSE)[,1:9]
+````
+
+````{r}
+grid = expand.grid(.n.trees=seq(100,500, by=200), .interaction.depth=seq(1,4, by=1), .shrinkage=c(.001,.01,.1), .n.minobsinnode=10)
+````
+
+#### b\. Create control object for training model
+
+```{r echo=TRUE}
+control = trainControl(method="LOOCV")
+```
+
+#### c\. Create model with training parameter input
+
+```{r}
+gbm.pros.train = train(lpsa~., data=pros.train, method="gbm", trControl=control, tuneGrid=grid)
+gbm.pros.train
+```
+
+```{r echo=TRUE}
+gbm.pros.train
+```
+
+
+```{r}
+gbm.pros = gbm(lpsa~., data=pros.train, n.trees=300, interaction.depth=2, shrinkage=0.01, distribution="gaussian")
+```
+
+```{r}
+gbm.pros.test = predict(gbm.pros, newdata=pros.test, n.trees=300)
+gbm.resid = gbm.pros.test - pros.test$lpsa
+mean(gbm.resid^2)
+```
+
+
+#### Predicted vs. Actual
+
+```{r}
+plot(gbm.pros.test, pros.test$lpsa, main="Predicted versus Actuals")
+```
+
+***
+## 2\. Boosted Gradient Classification
+
+#### Load test Data
+
+```{r}
+data(biopsy)
+biopsy = biopsy[,-1] #delete ID
+names(biopsy) = c("thick", "u.size", "u.shape", "adhsn", "s.size", "nucl", "chrom", "n.nuc", "mit", "class") #change the feature names
+biopsy.v2 = na.omit(biopsy) #delete the observations with missing values
+
+set.seed(123) #random number generator
+ind = sample(2, nrow(biopsy.v2), replace=TRUE, prob=c(0.7, 0.3))
+
+biop.train = biopsy.v2[ind==1,] #training data set
+biop.test = biopsy.v2[ind==2,]  #test data set
+```
+
+#### Tune GBM parameters
+
+```{r}
+control = trainControl(method="CV", number=10)
+set.seed(123)
+gbm.biop.train = train(class~., data=biop.train, method="gbm", trControl=control, tuneGrid=grid)
+gbm.biop.train
+```
+
+#### Change classification
+
+```{r echo=FALSE}
+biop.train$class = ifelse(biop.train$class=="benign",0,1)
+```
+
+#### Create new Model
+
+```{r echo=FALSE}
+gbm.biop = gbm(class~., distribution="bernoulli", data=biop.train, n.trees=100, interaction.depth=1, shrinkage=0.1)
+```
+
+#### Evaluate model results
+
+```{r}
+gbm.biop.test = predict(gbm.biop, newdata=biop.test, type="response", n.trees=100)
+gbm.class = ifelse(gbm.biop.test <0.5,"benign", "malignant")
+table(gbm.class, biop.test$class)
+````
+
+#### **End**

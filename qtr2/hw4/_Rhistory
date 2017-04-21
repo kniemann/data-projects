@@ -1,0 +1,512 @@
+value <- na.omit(value)
+value[-1] <- sapply(value[-1], function(x) as.numeric(as.character(x)) )
+value$rank <- value$TUITIONFEE_IN/value$mn_earn_wne_p7
+value <- value[order(value$rank),]
+head(value)
+?sample
+?help
+#-----------------------------
+#
+#  Weather Scraper Function
+#
+#  Purpose: Get and store data from wunderground
+#
+#  Created by: Nikola Tesla (ntesla@uw.edu)
+#
+#  Created on: 2015-05-07
+#
+#-----------------------------
+##----Import Libraries-----
+require(RSQLite)
+require(logging)
+##----Define the get-weather-data function-----
+get_weather_data = function(airport, dates, logger=NA, db_conn=NA){
+# Build HTML Link String
+site_prefix = 'http://www.wunderground.com/history/airport/'
+site_suffix = '/DailyHistory.html?format=1'
+weather_links = paste0(site_prefix,airport,'/',gsub('-','/',dates),site_suffix)
+# Initialize final data frame
+weather_frame = data.frame()
+# Get Data
+for (l in weather_links){
+print(paste('Getting link',l))
+# Log each attempt
+if (is.function(logger)){
+loginfo(paste('Getting link',l),logger=logger)
+}
+weather_info = tryCatch(readLines(l)[-1], # Get String Response
+error = function(e){
+print(paste('Error getting',l)) # Output Error on Screen/Console
+if(is.function(logger)){loginfo(paste('Error getting',l)
+,logger=logger)} # Store Error in Log
+})
+weather_info = strsplit(weather_info,',') # Parse each line by  a comma
+headers = weather_info[[1]]               # Get Headers
+weather_info = weather_info[-1]           # Drop Headers
+# Now transform list into data frame
+weather_info = do.call(rbind.data.frame, weather_info)
+names(weather_info) = headers
+# Post Retrieval Data Cleanup
+weather_info <- data.frame(lapply(weather_info, as.character),
+stringsAsFactors=FALSE)
+# Convert numeric columns to numbers
+numeric_cols = c(2,3,4,5,6,8,9,10,13)
+weather_info[numeric_cols] = lapply(weather_info[numeric_cols],as.numeric)
+# Fill in the 'dashes' to zero
+weather_info[is.na(weather_info)]=0
+# Rename the date column and drop the last html tag
+colnames(weather_info)[14]="Date"
+weather_info$Date = as.Date(substr(weather_info$Date,1,10))
+# Concatenate DFs together
+weather_frame = tryCatch(rbind(weather_frame, setNames(weather_info, names(weather_frame))),
+error=function(e) {print(e);weather_frame})
+} # End loop through each day's weather csv link (l)
+# Log ending time
+if(is.function(logger)){
+loginfo('All done!',logger=logger)
+}
+# Write to SQLite DB
+if(isS4(db_conn)){
+dbWriteTable(db_conn, airport, weather_frame, overwrite=TRUE)
+}
+names(weather_frame) = c('time','temp','dew_pt','humidity','pressure',
+'visibility','wind_dir','wind_speed','gust_speed',
+'precipitation','events','conditions',
+'wind_dir_deg','date')
+return(weather_frame)
+}
+if(interactive()){
+##----Setup Test Logger-----
+basicConfig()
+addHandler(writeToFile, file="~/testing.log", level='DEBUG')
+##----Test Parameters----
+airport = 'KSEA'
+dates = seq(from=as.Date('2015-05-01'),
+to=as.Date('2015-05-06'),
+by=1)
+sql_db_name = 'weather.db'
+##----Connect to SQLite DB----
+con = dbConnect(SQLite(), dbname=sql_db_name)
+weather_data = get_weather_data(airport, dates)
+dbDisconnect(con)
+}
+install(RSQLite)
+install(logging)
+require(RSQLite)
+require(logging)
+install.packages("twitteR")
+install.packages("devtools")
+library(twitteR)
+library(devtools)
+devtools::install_version("httr", version="0.6.0", repos="http://cran.us.r-project.org")
+library(httr)
+setwd('C:\Users\kevin\Google Drive\datasci\hw2')
+twit_cred = read.csv('twitter_cred.csv', stringsAsFactors=FALSE)
+TWITTER_CONSUMER_KEY = twit_cred$TWITTER_CONSUMER_KEY
+TWITTER_CONSUMER_SECRET = twit_cred$TWITTER_CONSUMER_SECRET
+TWITTER_ACCESS_TOKEN = twit_cred$TWITTER_ACCESS_TOKEN
+TWITTER_ACCESS_SECRET = twit_cred$TWITTER_ACCESS_SECRET
+setup_twitter_oauth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET,
+TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET)
+ds <- searchTwitter('#datascience', locale=NULL, geocode=NULL,n=500)
+library(twitteR)
+library(devtools)
+library(httr)
+devtools::install_version("httr", version="0.6.0", repos="http://cran.us.r-project.org")
+library(twitteR)
+library(devtools)
+?devtools::install_version
+library(httr)
+devtools::install_version("httr", version="0.6.0", repos="http://cran.us.r-project.org")
+library(twitteR)
+library(devtools)
+library(twitteR)
+devtools::install_version("httr", version="0.6.0", repos="http://cran.us.r-project.org")
+library(httr)
+library(twitteR)
+library(devtools)
+clear
+cls
+library(twitteR)
+devtools::install_version("httr", version="0.6.0", repos="http://cran.us.r-project.org")
+install.packages("digest")
+devtools::install_version("httr", version="0.6.0", repos="http://cran.us.r-project.org")
+devtools::install_version("httr", version="0.6.0", repos="http://cran.us.r-project.org")
+devtools::install_version("httr", version="0.6.0", repos="http://cran.us.r-project.org")
+require(logging)
+r -version
+help()
+version
+mydata = read.csv("C:\temp\farm_data.txt")
+str(mydata)
+mydata = read.csv("C:\temp\farm_data.txt")
+mydata <= read.csv("C:\temp\farm_data.txt")
+mydata <= read.csv("C:\temp\farm_data.txt")
+mydata <- read.csv("C:\temp\farm_data.txt")
+mydata <- read.csv("C:/temp/farm_data.txt")
+str(mydata)
+View(mydata)
+View(mydata)
+?read.csv
+mydata <- read.csv("C:/temp/farm_data.txt",stringsAsFactors=FALSE, sep=";")
+str(mydata)
+View(mydata)
+View(mydata)
+##--------------------------------------------
+setwd('C:/Users/kevin/Google Drive/datasci/hw4/')
+data = read.csv('ChicagoDiabetesData.csv', stringsAsFactors = FALSE)
+data_sums = apply(data[-1],2,sum)
+hospitalizations = data_sums[grepl('Hospitalizations', names(data))]
+admit_rate = data_sums[grepl('Crude.Rate.[0-9]+$', names(data), perl = TRUE)]
+plot(hospitalizations, admit_rate)
+hospitalizations_diff = diff(hospitalizations)
+admit_rate_diff = diff(admit_rate)
+plot(hospitalizations_diff, admit_rate_diff)
+hospitalizations
+admit_rate
+hospitalizations_diff
+hospitalizations
+lmfit = lm( change ~ hospitalizations + admit_rate )
+lmfit = lm(hospitalizations ~ admit_rate )
+plot(hospitalizations, admit_rate)
+lmfit = lm(hospitalizations ~ admit_rate )
+plot(lmfit)
+lmfit
+summary(lmfit)
+plot(hospitalizations, admit_rate)
+plot(lmfit$model)
+lmfit = lm(hospitalizations ~ admit_rate )
+plot(lmfit$coefficients)
+plot(lmfit$fitted.values)
+plot(hospitalizations, admit_rate)
+plot(hospitalizations, admit_rate)
+lmfit = lm(hospitalizations ~ admit_rate )
+abline(lmfit)
+plot(hospitalizations, admit_rate)
+lmfit = lm(hospitalizations ~ admit_rate )
+abline(lmfit)
+summary(lmfit)
+plot(hospitalizations, admit_rate)
+lmfit = lm(hospitalizations ~ admit_rate)
+lmfit2 = lm(admit_rate ~ hospitalizations)
+abline(lmfit)
+abline(lmfit2)
+plot(hospitalizations, admit_rate)
+lmfit = lm(hospitalizations ~ admit_rate)
+lmfit2 = lm(admit_rate ~ hospitalizations)
+abline(lmfit)
+plot(hospitalizations, admit_rate)
+lmfit = lm(admit_rate ~ hospitalizations)
+abline(lmfit)
+summary(lmfit)
+setwd('C:/Users/kevin/Google Drive/datasci/hw4/')
+data = read.csv('ChicagoDiabetesData.csv', stringsAsFactors = FALSE)
+data_sums = apply(data[-1],2,sum)
+hospitalizations = data_sums[grepl('Hospitalizations', names(data))]
+admit_rate = data_sums[grepl('Crude.Rate.[0-9]+$', names(data), perl = TRUE)]
+plot(hospitalizations, admit_rate)
+admitLM = lm(admit_rate ~ hospitalizations)
+abline(admitLM)
+#Diff
+hospitalizations_diff = diff(hospitalizations)
+admit_rate_diff = diff(admit_rate)
+plot(hospitalizations_diff, admit_rate_diff)
+diffLM = lm(admit_rate ~ hospitalizations)
+abline(diffLM)
+plot(hospitalizations_diff, admit_rate_diff)
+diffLM = lm(hospitalizations_diff ~ admit_rate_diff)
+abline(diffLM)
+setwd('C:/Users/kevin/Google Drive/datasci/hw4/')
+data = read.csv('ChicagoDiabetesData.csv', stringsAsFactors = FALSE)
+data_sums = apply(data[-1],2,sum)
+hospitalizations = data_sums[grepl('Hospitalizations', names(data))]
+admit_rate = data_sums[grepl('Crude.Rate.[0-9]+$', names(data), perl = TRUE)]
+plot(hospitalizations, admit_rate)
+admitLM = lm(admit_rate ~ hospitalizations)
+abline(admitLM)
+summary(admitLM)
+#Diff
+hospitalizations_diff = diff(hospitalizations)
+admit_rate_diff = diff(admit_rate)
+plot(hospitalizations_diff, admit_rate_diff)
+diffLM = lm(hospitalizations_diff ~ admit_rate_diff)
+abline(diffLM)
+summary(diffLM)
+setwd('C:/Users/kevin/Google Drive/datasci/hw4/')
+data = read.csv('ChicagoDiabetesData.csv', stringsAsFactors = FALSE)
+data_sums = apply(data[-1],2,sum)
+hospitalizations = data_sums[grepl('Hospitalizations', names(data))]
+admit_rate = data_sums[grepl('Crude.Rate.[0-9]+$', names(data), perl = TRUE)]
+plot(hospitalizations, admit_rate)
+admitLM = lm(admit_rate ~ hospitalizations)
+abline(admitLM)
+#Summary of linear model
+summary(admitLM)
+#Diff
+hospitalizations_diff = diff(hospitalizations)
+admit_rate_diff = diff(admit_rate)
+plot(hospitalizations_diff, admit_rate_diff)
+diffLM = lm(hospitalizations_diff ~ admit_rate_diff)
+abline(diffLM)
+#Summary of diff linear model
+summary(diffLM)
+require(httr)
+require(httr)
+install.packages("httr")
+require(httr)
+data <- GET("https://www.strava.com/api/v3/segments/668184/leaderboard", add_headers(Authorization = "888b54324b9ec437f51beff9285c2337e474191c"), query = list(page = 1, per_page = 100))
+leaderboard <- content(data, as = "parsed")
+leaderboard
+data <- GET("https://www.strava.com/api/v3/segments/665227/leaderboard", add_headers(Authorization = "888b54324b9ec437f51beff9285c2337e474191c"), query = list(page = 1, per_page = 100))
+data
+leaderboard <- content(data, as = "parsed")
+leaderboard
+data <- GET("https://www.strava.com/api/v3/segments/665227/leaderboard", add_headers(Authorization = "Bearer 888b54324b9ec437f51beff9285c2337e474191c"), query = list(page = 1, per_page = 100))
+leaderboard <- content(data, as = "parsed")
+leaderboard
+leaderboard
+leaderboard[1]
+leaderboard[1][1]
+leaderboard[[1]]
+leaderboard <- as.data.frame(content(data, as = "parsed"))
+leaderboard
+leaderboard <- as.data.frame(content(data, as = "parsed"))
+leaderboard
+data <- GET("https://www.strava.com/api/v3/segments/665227/leaderboard", add_headers(Authorization = "Bearer 888b54324b9ec437f51beff9285c2337e474191c"), query = list(page = 1, per_page = 5))
+leaderboard <- content(data, as = "parsed")
+leaderboard
+leaderboard$entries[1]
+data <- GET("https://www.strava.com/api/v3/segments/614610/leaderboard", add_headers(Authorization = "Bearer 888b54324b9ec437f51beff9285c2337e474191c"), query = list(page = 1, per_page = 5))
+leaderboard <- content(data, as = "parsed")
+leaderboard$entries[1]
+df = as.data.frame(leaderboard$entries)
+df = as.data.frame(leaderboard$entries[1])
+leaderboard$entries[1]
+leaderboard$entries[1][1]
+leaderboard$entries[1][[1]]
+leaderboard$entries[1]
+first = leaderboard$entries[1]
+first
+class(first)
+?unlist
+df = unlist(leaderboard)
+df = data.frame(unlist(leaderboard))
+View(df)
+nrow(leaderboard)
+nrows(leaderboard)
+length(leaderboard)
+df <- data.frame(matrix(unlist(leaderboard), nrow=5, byrow=T))
+first = leaderboard$entries[1]
+first
+length(first)
+df <- data.frame(matrix(unlist(leaderboard), nrow=5, byrow=T),stringsAsFactors=FALSE)
+View(df)
+df = do.call(rbind.data.frame, leaderboard)
+df = do.call(rbind.data.frame, leaderboard)
+df = data.frame(unlist(leaderboard))
+View(df)
+?matrix
+first = leaderboard$entries[1]
+first
+first[1]
+first[[1]]
+first[[[1]]]
+first[[1]]
+first[[1]]$athlete_name
+leaderboard$entries[1][[1]]$athlete_name
+leaderboard$entries[1][[2]]$athlete_name
+leaderboard$entries[1][[1]]$athlete_name
+leaderboard$entries[2][[1]]$athlete_name
+leaderboard$entries[3][[1]]$athlete_name
+leaderboard$entries[1][[2]]$athlete_name
+leaderboard$entries[1][[1]]$athlete_name
+df <- data.frame(matrix(unlist(leaderboard), nrow=5, byrow=T),stringsAsFactors=FALSE)
+leaderboard$entries[5]
+leaderboard$entries[6]
+leaderboard$entries[10]
+data <- GET("https://www.strava.com/api/v3/segments/614610/leaderboard", add_headers(Authorization = "Bearer 888b54324b9ec437f51beff9285c2337e474191c"), query = list(page = 1, per_page = 5))
+leaderboard <- content(data, as = "parsed")
+df = data.frame(unlist(leaderboard))
+df <- data.frame(matrix(unlist(leaderboard), nrow=5, byrow=T),stringsAsFactors=FALSE)
+leaderboard$entries[1][[1]]$athlete_name
+leaderboard$entries[2][[1]]$athlete_name
+leaderboard$entries[5][[1]]$athlete_name
+leaderboard$entries[6][[1]]$athlete_name
+leaderboard$entries[7][[1]]$athlete_name
+leaderboard$entries[8][[1]]$athlete_name
+leaderboard$entries[9][[1]]$athlete_name
+leaderboard$entries[9][[1]]$athlete_name
+data
+data$content
+leaderboard
+leaderboard[-which(leaderboard > rowCount)]
+rowCount = 5
+leaderboard[-which(leaderboard > rowCount)]
+?which
+leaderboard[5]
+leaderboard[6]
+rowCount = 5
+data <- GET("https://www.strava.com/api/v3/segments/614610/leaderboard", add_headers(Authorization = "Bearer 888b54324b9ec437f51beff9285c2337e474191c"), query = list(page = 1, per_page = rowCount))
+leaderboard <- content(data, as = "parsed")
+leaderboard[6]
+leaderboard[5]
+df <- data.frame(matrix(unlist(leaderboard), nrow=10, byrow=T),stringsAsFactors=FALSE)
+leaderboard <- leaderboard$entries[-which(leaderboard$entries > rowCount)]
+leaderboard$entries[6][[1]]$athlete_nameleaderboard$entries
+leaderboard$entries
+leaderboard$entries[5]
+leaderboard$entries[6]
+leaderboard <- leaderboard$entries[-which(leaderboard$entries > rowCount)]
+class(leaderboard)
+class(leaderboard$entries)
+class(leaderboard$effort_count)
+class(leaderboard$list)
+class(leaderboard$entry_count
+class(leaderboard$entry_count
+leaderboard$entry_count
+leaderboard <- leaderboard$entries
+leaderboard <- leaderboard$entries
+leaderboard[1]
+leaderboard
+data <- GET("https://www.strava.com/api/v3/segments/614610/leaderboard", add_headers(Authorization = "Bearer 888b54324b9ec437f51beff9285c2337e474191c"), query = list(page = 1, per_page = rowCount))
+leaderboard <- content(data, as = "parsed")
+leaderboard <- leaderboard$entries
+leaderboard
+leaderboard[1]
+leaderboard[10]
+leaderboard$entries
+leaderboard <- leaderboard$entries
+leaderboard
+leaderboard <- content(data, as = "parsed")
+leaderboard <- leaderboard$entries
+leaderboard
+leaderboard <- leaderboard[-which(leaderboard > 5)]
+leaderboard
+leaderboard[5]
+leaderboard[6]
+leaderboard <- leaderboard[-which(leaderboard == 5)]
+leaderboard <- leaderboard[-5]
+leaderboard
+leaderboard[5]
+leaderboard <- content(data, as = "parsed")
+leaderboard <- leaderboard$entries
+leaderboard <- leaderboard[-6:10]
+leaderboard <- content(data, as = "parsed")
+leaderboard <- leaderboard$entries
+leaderboard <- leaderboard[-6:-10]
+leaderboard
+data <- GET("https://www.strava.com/api/v3/segments/614610/leaderboard", add_headers(Authorization = "Bearer 888b54324b9ec437f51beff9285c2337e474191c"), query = list(page = 1, per_page = rowCount))
+leaderboard <- content(data, as = "parsed")
+leaderboard <- leaderboard$entries
+length(leaderboard)
+leaderboard <- leaderboard[-rowCount:-length(leaderboard)]
+leaderboard
+leaderboard <- content(data, as = "parsed")
+leaderboard <- leaderboard$entries
+leaderboard <- leaderboard[-(rowCount+1):-length(leaderboard)]
+df <- data.frame(matrix(unlist(leaderboard), nrow=5, byrow=T),stringsAsFactors=FALSE)
+leaderboard
+df = data.frame(unlist(leaderboard))
+View(df)
+df <- data.frame(matrix(unlist(leaderboard), nrow=5, byrow=T),stringsAsFactors=FALSE)
+leaderboard
+length(leaderboard)
+length(leaderboard[1])
+length(leaderboard[2])
+leaderboard[1]
+leaderboard[5]
+df <- data.frame(matrix(unlist(leaderboard), nrow=5, byrow=T),stringsAsFactors=FALSE)
+leaderboard[5]
+leaderboard[6]
+leaderboard[1][1]
+leaderboard[1]
+leaderboard[1]
+leaderboard[[1]]$athlete_name
+View(df)
+df = data.frame(unlist(leaderboard))
+View(df)
+leaderboard[[4]]$athlete_name
+rawDF = data.frame(unlist(leaderboard))
+View(rawDF)
+leaderboard[[2]]
+rawDF = data.frame(unlist(leaderboard))
+rawDF = data.frame(unlist(lapply(leaderboard,isnull)))
+rawDF = data.frame(unlist(lapply(leaderboard,is.null)))
+View(rawDF)
+leaderboard <- content(data, as = "parsed")
+leaderboard <- leaderboard$entries
+leaderboard <- leaderboard[-(rowCount+1):-length(leaderboard)]
+leaderboard[5]
+leaderboard[6]
+leaderboard[1]
+rawDF = data.frame(unlist(lapply(leaderboard[1:5],is.null)))
+rawDF = data.frame(unlist(lapply(leaderboard[1:5][1:15],is.null)))
+View(rawDF)
+leaderboard[1][14]
+leaderboard[1][14]
+leaderboard[1]
+leaderboard[1][[1]]
+leaderboard[1][[2]]
+leaderboard[1][[1]]
+class(leaderboard[1][[1]])
+leaderboard[1][[1]]$athlete_name
+leaderboard[1][[1]]$athlete_name
+leaderboard[1][[1:rowCount]]$athlete_name
+leaderboard[1][[1:2]]$athlete_name
+leaderboard[1][[1]]$athlete_name
+?lapply
+leaderboard <- content(data, as = "parsed")
+leaderboard <- leaderboard$entries
+leaderboard <- leaderboard[-(rowCount+1):-length(leaderboard)]
+lapply(leaderboard)
+leaderboard[1][[1]]$athlete_name
+lapply(leaderboard, function(x) x)
+lapply(leaderboard, function(x) x)
+lapply(leaderboard, function(x) x[1])
+lapply(leaderboard, function(x) x[1][1])
+lapply(leaderboard, function(x) x[1][[1]])
+lapply(leaderboard, function(x) x[1])
+lapply(leaderboard, function(x) x$athlete_name)
+df$Name = lapply(leaderboard, function(x) x$athlete_name)
+lapply(leaderboard, function(x) x$athlete_name)
+sapply(leaderboard, function(x) x$athlete_name)
+df$Name = sapply(leaderboard, function(x) x$athlete_name)
+sapply(leaderboard, function(x) x$athlete_name)
+test = sapply(leaderboard, function(x) x$athlete_name)
+class(test)
+test = as.data.frame(sapply(leaderboard, function(x) x$athlete_name))
+View(test)
+leaderboard[1][[1]]$moving_time
+df = as.data.frame(sapply(leaderboard, function(x) x$athlete_name))
+df$MovingTime <- as.data.frame(sapply(leaderboard, function(x) x$moving_time))
+View(df)
+##--------------------------------------------
+setwd('C:/Users/kevin/Google Drive/datasci/hw4/')
+data = read.csv('ChicagoDiabetesData.csv', stringsAsFactors = FALSE)
+data_sums = apply(data[-1],2,sum)
+hospitalizations = data_sums[grepl('Hospitalizations', names(data))]
+admit_rate = data_sums[grepl('Crude.Rate.[0-9]+$', names(data), perl = TRUE)]
+plot(hospitalizations, admit_rate)
+admitLM = lm(admit_rate ~ hospitalizations)
+abline(admitLM)
+#Summary of linear model
+summary(admitLM)
+#Diff
+hospitalizations_diff = diff(hospitalizations)
+admit_rate_diff = diff(admit_rate)
+plot(hospitalizations_diff, admit_rate_diff)
+diffLM = lm(hospitalizations_diff ~ admit_rate_diff)
+abline(diffLM)
+#Summary of diff linear model
+summary(diffLM)
+setwd('E:/Work/Teaching/PCE_Data_Science/4_HypothesisTesting_CentralLimit/')
+data = read.csv('ChicagoDiabetesData.csv', stringsAsFactors = FALSE)
+data_sums = apply(data[-1],2,sum)
+hospitalizations = data_sums[grepl('Hospitalizations', names(data))]
+admit_rate = data_sums[grepl('Crude.Rate.[0-9]+$', names(data), perl = TRUE)]
+plot(hospitalizations, admit_rate)
+hospitalizations_diff = diff(hospitalizations)
+admit_rate_diff = diff(admit_rate)
+plot(hospitalizations_diff, admit_rate_diff)
+hospitalizations_diff
+admit_rate_diff

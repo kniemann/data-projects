@@ -1,0 +1,350 @@
+---
+title: "DS250 - Introduction to Data Science"
+author: "Kevin Niemann"
+date: "November 3, 2015"
+output:  html_document
+---
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
+```{r}
+rm( list = ls())  # Clear environment
+```
+
+# Assignment 5 - Core concepts in Statistics
+
+This assignment covers core concepts in data and descriptive and inferential statistics. Statistical analysis is one of the primary tools of a Data Scientist used in understanding data, testing validity, and making predictions.
+
+### The objectives of this assignment are:
+* Understand the types of data
+* Review core concepts in descriptive statistics
+* High level review of probability distributions
+* Practice making predictions using regression and probability
+
+***
+#### Question 1 - Types of Data
+**a**\. Describe some of the differences between qualitative and quantitative data:
+
+````
+Quantitative data can be measured numerically, may be considered objective. Qualitative is a description of something. This could be subjective. 
+
+````
+
+**b**\. Describe some of the differences between an interval and a ratio:
+
+````
+The main difference is that an interval of zero doesn't mean zero of that thing, versus a ratio of zero does.
+````
+
+**c**\. From the image below, identify the statistical data types in the departure table:(http://canvas.uw.edu/files/33441437/download?download_frd=1)
+Quantitative: destination, flight, airline, term gate, Status, Equip
+Qualitative: On-time rating, Departure
+***
+#### Question 2 - Distributions
+**a**\. Central Tendency: Briefly describe the following measures:
+
+*    Mode: the value with the highest occurance.
+*    Median: the number that is halfway through a set.
+*    Mean: the sum of a set of numbers divided by the number of numbers     (average).
+
+````
+
+````
+
+**b**\. Dispersion: Briefly describe the following measures:
+
+*    Range: the difference between the highest and lowest numbers in a set.
+*    Variance: the average of the squared distances from the mean.
+*    Standard deviation: The square root of the variance.
+
+````
+
+````
+
+**c**\. Using the following sequence, create a plot of the normal distribution with a mean = 0 and standard deviation = 1.
+
+```{r,echo=TRUE}
+x <- seq(-5,3, 0.01)
+plot(x=x, y=dnorm(x, mean=0, sd=1), type='l')
+
+````
+
+***
+#### Question 3 - Probabilities
+**a**\. Using the heart patient data in the 'processed.cleveland.data.txt' file: (link below)   
+(https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/heart-disease.names)  
+(https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data)  
+
+- separate the population into male and female groups  
+- calculate the mean and standard deviation for male cholesterol values  
+- create a histogram showing the distribution of male cholesterol values 
+
+```{r,echo=TRUE}
+heart <- read.table("https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data",sep=",",header=FALSE)
+colnames(heart) <- c("age","sex","cp","trestbps","chol","fbs","restecg","thalach","exang","oldpeak","slope","ca","thal","num")
+mheart <- subset(heart, heart$sex == 1)
+fheart <- subset(heart, heart$sex == 0)
+mean(mheart$chol)
+hist(mheart$chol, probability = TRUE)
+
+````
+
+**b**\. Using **rnorm()**, create a normal distribution and compare the histogram of the male cholesterol against the simulated normal distribution. Are they the same? *(can also use dnorm())*
+
+```
+mcholmean <- mean(mheart$chol)
+mcholsd   <- sd(mheart$chol)
+x <- 126:353
+y <- rnorm(n=x, mean = mcholmean, sd = mcholsd)
+hist(y,probability = TRUE)
+
+Based on the histogram comparison, the data looks like a normal distribution.
+````
+
+**c**\. Using **pnorm()**, determine the probability that a randomly chosen adult male has a cholesterol level of over 260.
+
+````
+1 - pnorm(q = 260, mean = mcholmean, sd = mcholsd)
+.31
+````
+
+***
+#### Question 4 - Comparison
+**a**\. Load sample data file from: (http://www.openintro.org/stat/data/cdc.R)  
+*(use "source(file)" function to load external R data.)*
+
+````
+source("http://www.openintro.org/stat/data/cdc.R")
+````
+
+**b**\. Create a histogram plot of the weight values:
+
+````
+hist(cdc$weight)
+````
+
+**c**\. Create a new data frame (*young*) from the cdc data file containing individuals between the ages of (18 to 30).
+
+````
+young <- subset(cdc, age >= 18 & age <= 30)
+````
+
+**d**\. Use **sample()**, to collect 50 random sample values from the (young) data frame.
+
+````
+sample <- young[sample(nrow(young), 50, replace = FALSE, prob = NULL),]
+````
+
+**e**\. Describe the distribution of this sample?  
+How does it compare to the distribution of the population from which it was sampled from?
+
+````
+cdcNum <- sapply(cdc, is.numeric)
+colMeans(cdc[, cdcNum])
+
+sampleNum <- sapply(sample, is.numeric)
+colMeans(sample[, sampleNum])
+
+Sample is taller, weighs less, smokes less.
+
+````
+
+**f**\. Using **sample()**, create three separate sample collections for (10, 50, 100) samples and plot the histogram of these three data sets. How are they different?  
+
+*using the original cdc data, not the filtered 'young' data*
+
+````
+sample10 <- cdc[sample(nrow(cdc), 10, replace = FALSE, prob = NULL),]
+hist(sample10$age)
+sample50 <- cdc[sample(nrow(cdc), 50, replace = FALSE, prob = NULL),]
+hist(sample50$age)
+sample100 <- cdc[sample(nrow(cdc), 100, replace = FALSE, prob = NULL),]
+hist(sample100$age)
+
+````
+
+***
+#### Question 5 - Confidence Intervals  
+Using the sample data from: (http://www.openintro.org/stat/data/cdc.R)  
+*(use "source()" to load an external file)*
+
+
+**a**\. Create a data frame with the height values from the cdc sample data.
+
+````
+height <- data.frame(cdc$height)
+````
+
+**b**\. Create a sample data frame with 60 random samples of individual height values. Based on this sample data, what it the average height for these 60 individuals?
+
+````
+sample60 <- data.frame(height=height[sample(nrow(height), 60, replace = FALSE, prob = NULL),])
+mean(sample60$height)
+67.16
+````
+
+**c**\. Calculate a confidence interval (upper, lower bounds) for the sample data.
+
+````
+t <- t.test(sample60$height)
+t
+
+````
+
+**d**\. Write a short loop to create (50) separate sample sets and calculate the confidence intervals for each set. How do the confidence intervals change in the 50 samples?
+
+
+````
+intervals <- list()
+for (i in 1:50) {
+   sampleset <- sample_n(height,60,replace=FALSE)
+   intervals[[i]] <- t.test(sampleset)$conf.int
+}
+
+intervals.df <- as.data.frame(do.call(rbind, intervals))
+
+ggplot(data = intervals.df) + geom_segment(aes(x = 1:50, xend = 1:50, y = V1, yend = V2))
+
+The confidence intervals change randomly.
+````
+
+***
+#### Question 6 - Inference  
+Use **"load()"** to import sample data file from: (http://www.openintro.org/stat/data/nc.RData) and complete the following:
+
+**a**\. Review the attributes in this data set and determine which ones are categorical or numeric.
+
+````
+load(url('http://www.openintro.org/stat/data/nc.RData'))
+head(nc)
+Numerical: fage,mage,weeks,visits,gained,weight
+Categorical: mature,premie,martial,lowbirthweight,gender,habit,whitemom
+
+````
+
+**b**\. Create a side-by-side boxplot of habit and weight. What does the plot highlight about the relationship between these two variables?
+
+````
+library(ggplot2)
+data <- tbl_df(nc)
+plot<-ggplot(data, aes(x=habit, y=weight))
+plot+geom_boxplot()
+
+Smokers kids weight less than non smoker kids at birth.
+````
+
+**c**\. Using the following statement to compare weight and habit. Is the difference between the mean of nonsmoker and that of smoker statistically significant?
+
+````
+by(nc$weight, nc$habit, mean)
+
+g1 <- tnc %>% filter(habit == 'smoker') %>% select(weight)
+g2 <- tnc %>% filter(habit == 'nonsmoker') %>% select(weight)
+t.test(g2$weight,g1$weight, paired=FALSE, var.equal=FALSE)$conf
+
+Difference is statistically different.
+
+````
+
+**d**\. Use the following statement to calculate the inference measure between weight and habit.
+
+````
+inference(y = nc$weight, x = nc$habit, est = "mean", type = "ht", null = 0, alternative = "twosided", method = "theoretical")
+
+Response variable: numerical, Explanatory variable: categorical
+Difference between two means
+Summary statistics:
+n_nonsmoker = 873, mean_nonsmoker = 7.1443, sd_nonsmoker = 1.5187
+n_smoker = 126, mean_smoker = 6.8287, sd_smoker = 1.3862
+Observed difference between means (nonsmoker-smoker) = 0.3155
+
+H0: mu_nonsmoker - mu_smoker = 0 
+HA: mu_nonsmoker - mu_smoker != 0 
+Standard error = 0.134 
+Test statistic: Z =  2.359 
+p-value =  0.0184 
+
+
+
+````
+
+**e**\. In the statement above, change the type argument to 'ci' to construct a confidence interval for the difference between the weights of babies born to smoking and non-smoking mothers.
+
+````
+inference(y = nc$weight, x = nc$habit, est = "mean", type = "ci", null = 0, alternative = "twosided", method = "theoretical")
+Response variable: numerical, Explanatory variable: categorical
+Difference between two means
+Summary statistics:
+n_nonsmoker = 873, mean_nonsmoker = 7.1443, sd_nonsmoker = 1.5187
+n_smoker = 126, mean_smoker = 6.8287, sd_smoker = 1.3862
+Observed difference between means (nonsmoker-smoker) = 0.3155
+
+Standard error = 0.1338 
+95 % Confidence interval = ( 0.0534 , 0.5777 )
+
+````
+
+***
+#### Question 7 - Linear Regression  
+Load the sample data file from: (http://www.openintro.org/stat/data/mlb11.RData) and complete the following:
+
+**a**\. Use the **cor()** function to determine the numeric relationship between 'runs' and 'at_bats'.
+
+````
+load(url('http://www.openintro.org/stat/data/mlb11.RData'))
+
+cor(x=mlb11$at_bats,y=mlb11$runs)
+
+````
+
+**b**\. Use the custom function **plot_ss()** *(included in RData file)* to create a plot for:
+
+````
+plot_ss(x = mlb11$at_bats, y = mlb11$runs, showSquares = TRUE)
+
+````
+
+**c**\. Review the mlb11 data set and select another variable that might be a good predictor of runs.
+
+````
+cor(x=mlb11$new_onbase,y=mlb11$runs)
+On base (percentage of time a batter gets to a base)
+
+````
+
+**d**\. Create a scatterplot of the two variables and fit a linear model. Determine if there is a linear relationship?
+
+```
+plot <- ggplot(mlb11, aes(new_onbase, runs))
+plot + geom_smooth(method=lm)
+
+mlb11.lm <- lm(formula = runs ~ new_onbase, data = mlb11)
+summary(mlb11.lm)
+```
+P value is very small so there is definitely a linear relationship.
+
+***
+#### Question 8 - Linear Regression  
+Use the built-in dataset (*faithful*) and complete the following:
+
+a) Create a linear model *lm()* and capture the standard residuals :
+
+````
+data(faithful)
+
+faithlm <- lm(eruptions ~ waiting, data=faithful)
+faithresid = rstandard(faithlm) 
+summary(faithlm)
+
+````
+
+b) Using *qqnorm()* create a normal probability plot with *qqline()* showing the comparison:
+
+````
+qqnorm(faithresid, ylab="Residuals", xlab="Score", main="Faithful eruptions") 
+
+qqline(faithresid) 
+````
+
+
+#### **End**

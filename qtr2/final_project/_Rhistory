@@ -1,0 +1,512 @@
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+loginfo('Creating and testing linear model.')
+activities$average_watts = as.numeric(activities$average_watts)
+#Scale the watts from 0-max to 0-1.
+max = max(as.numeric(activities$average_watts), na.rm = TRUE)
+activities$average_watts_rating = as.numeric(activities$average_watts/max)
+activities$average_speed = as.numeric(activities$average_speed)
+# Split into train/test set
+train_ind = sample(1:nrow(activities), round(0.8*nrow(activities)))
+train_set = activities[train_ind,]
+test_set = activities[-train_ind,]
+#Perform logistic regression
+train_lm = glm(formula = average_watts_rating ~ neighborhood, family = binomial(link = "logit"),
+data = train_set)
+#Do predictions
+test_predictions = predict(train_lm, newdata = test_set, type="response")
+results = test_set["neighborhood"]
+results$pred = as.numeric(test_predictions)
+results$actual = as.numeric(test_set["average_watts_rating"]$average_watts_rating)
+results$error = abs(results$actual-results$pred)
+#Aggregate predictions by neighborhood
+agg = aggregate(results, by = list(results$neighborhood), FUN = mean )
+qplot(x= pred, y = actual, data =agg, na.rm = TRUE) + scale_y_continuous( limits = c(0,.6), expand = c(0,0) ) + scale_x_continuous( limits = c(0,.6), expand = c(0,0) ) +
+labs(title="Plot of predicted vs actual watts (each point is neighborhood)",x ="Predicted watts", y = "Actual watts")
+loginfo(paste('Mean prediction error', round(mean(results$error, na.rm =  TRUE), digits = 5)))
+fit = aov(pred ~ actual, data = agg)
+loginfo(paste('Reject null hypthesis, prediction is not the same as actual dataset p<.05',summary(fit)))
+View(agg)
+agg$neighborhood = NULL
+View(agg)

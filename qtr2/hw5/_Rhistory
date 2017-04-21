@@ -1,0 +1,512 @@
+act <- GET(url, add_headers(Authorization = "Bearer 888b54324b9ec437f51beff9285c2337e474191c"), query = list(page = 1, per_page = 100))
+result <- content(act, as = "parsed")
+usage = strsplit(act$headers$`x-ratelimit-usage`, ",")
+as.numeric(usage[[1]][1])
+as.numeric(usage[[1]][2])
+usage
+url = paste("https://www.strava.com/api/v3/activities/",i, sep="")
+act <- GET(url, add_headers(Authorization = "Bearer 888b54324b9ec437f51beff9285c2337e474191c"), query = list(page = 1, per_page = 100))
+result <- content(act, as = "parsed")
+url = paste("https://www.strava.com/api/v3/activities/",i, sep="")
+act <- GET(url, add_headers(Authorization = "Bearer 888b54324b9ec437f51beff9285c2337e474191c"), query = list(page = 1, per_page = 100))
+result <- content(act, as = "parsed")
+usage
+url = paste("https://www.strava.com/api/v3/activities/",i, sep="")
+act <- GET(url, add_headers(Authorization = "Bearer 888b54324b9ec437f51beff9285c2337e474191c"), query = list(page = 1, per_page = 100))
+result <- content(act, as = "parsed")
+usage = strsplit(act$headers$`x-ratelimit-usage`, ",")
+usage
+url = paste("https://www.strava.com/api/v3/activities/",i, sep="")
+act <- GET(url, add_headers(Authorization = "Bearer 888b54324b9ec437f51beff9285c2337e474191c"), query = list(page = 1, per_page = 100))
+result <- content(act, as = "parsed")
+usage = strsplit(act$headers$`x-ratelimit-usage`, ",")
+usage
+longLimit = as.numeric(usage[[1]][2])
+longLimit
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+wiki_edges = read.csv("wikipedia_edge_list.csv", stringsAsFactors=FALSE)
+wiki_degree_list = table(c(wiki_edges$Source))
+wiki_mean_degree = mean(wiki_degree_list)
+wiki_hist = hist(wiki_degree_list, breaks=50, freq=FALSE)
+# Test Power law distribution
+library(igraph)
+# Fit power law
+pow_fit = power.law.fit(wiki_degree_list)
+install.packages("igraph")
+require(igraph)
+?igraph
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+wiki_edges = read.csv("wikipedia_edge_list.csv", stringsAsFactors=FALSE)
+wiki_degree_list = table(c(wiki_edges$Source))
+wiki_mean_degree = mean(wiki_degree_list)
+wiki_hist = hist(wiki_degree_list, breaks=50, freq=FALSE)
+# Test Power law distribution
+library(igraph)
+# Fit power law
+pow_fit = power.law.fit(wiki_degree_list)
+summary(pow_fit)
+pow_fit$continuous
+pow_fit
+?power.law.fit
+#Kevin N
+#Assignment 5
+library(igraph)
+get_fb_degree_list = function() {
+# Load Facebook edge list
+fb_edges = read.csv("facebook_edge_list.csv',sep", stringsAsFactors=FALSE)
+fb_degree_list = table(c(fb_edges$Source))
+return (fb_degree_list)
+# Test Power law distribution
+#library(igraph)
+}
+createHist = function(fb_degree_list) {
+fb_hist = hist(fb_degree_list, breaks=50, freq=FALSE)
+}
+get_pow_fit = function(fb_degree_list) {
+pow_fit = power.law.fit(fb_degree_list)
+return(pow_fit)
+}
+# Fit power law
+setwd('C:/Users/kevin/Google Drive/datasci/hw4/')
+if(interactive()) {
+logReset()
+basicConfig(level='DEBUG')
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+addHandler(writeToFile, file="~/hw5.log",level='FINEST')
+loginfo(paste('Starting HW5.'))
+fb_degree_list = get_fb_degree_list()
+fb_mean_degree = mean(fb_degree_list)
+logdebug(paste('Closing HW5.'))
+pow_fit = get_pow_fit(fb_degree_list)
+}
+#Kevin N
+#Assignment 5
+library(igraph)
+get_fb_degree_list = function() {
+# Load Facebook edge list
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+fb_edges = read.csv("facebook_edge_list.csv',sep", stringsAsFactors=FALSE)
+fb_degree_list = table(c(fb_edges$Source))
+return (fb_degree_list)
+# Test Power law distribution
+#library(igraph)
+}
+createHist = function(fb_degree_list) {
+fb_hist = hist(fb_degree_list, breaks=50, freq=FALSE)
+}
+get_pow_fit = function(fb_degree_list) {
+pow_fit = power.law.fit(fb_degree_list)
+return(pow_fit)
+}
+# Fit power law
+setwd('C:/Users/kevin/Google Drive/datasci/hw4/')
+if(interactive()) {
+logReset()
+basicConfig(level='DEBUG')
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+addHandler(writeToFile, file="~/hw5.log",level='FINEST')
+loginfo(paste('Starting HW5.'))
+fb_degree_list = get_fb_degree_list()
+fb_mean_degree = mean(fb_degree_list)
+logdebug(paste('Closing HW5.'))
+pow_fit = get_pow_fit(fb_degree_list)
+}
+#Kevin N
+#Assignment 5
+library(igraph)
+get_fb_degree_list = function() {
+# Load Facebook edge list
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+fb_edges = read.csv("facebook_edge_list.csv",sep, stringsAsFactors=FALSE)
+fb_degree_list = table(c(fb_edges$Source))
+return (fb_degree_list)
+# Test Power law distribution
+#library(igraph)
+}
+createHist = function(fb_degree_list) {
+fb_hist = hist(fb_degree_list, breaks=50, freq=FALSE)
+}
+get_pow_fit = function(fb_degree_list) {
+pow_fit = power.law.fit(fb_degree_list)
+return(pow_fit)
+}
+# Fit power law
+setwd('C:/Users/kevin/Google Drive/datasci/hw4/')
+if(interactive()) {
+logReset()
+basicConfig(level='DEBUG')
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+addHandler(writeToFile, file="~/hw5.log",level='FINEST')
+loginfo(paste('Starting HW5.'))
+fb_degree_list = get_fb_degree_list()
+fb_mean_degree = mean(fb_degree_list)
+logdebug(paste('Closing HW5.'))
+pow_fit = get_pow_fit(fb_degree_list)
+}
+#Kevin N
+#Assignment 5
+library(igraph)
+get_fb_degree_list = function() {
+# Load Facebook edge list
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+fb_edges = read.csv("facebook_edge_list.csv", stringsAsFactors=FALSE)
+fb_degree_list = table(c(fb_edges$Source))
+return (fb_degree_list)
+# Test Power law distribution
+#library(igraph)
+}
+createHist = function(fb_degree_list) {
+fb_hist = hist(fb_degree_list, breaks=50, freq=FALSE)
+}
+get_pow_fit = function(fb_degree_list) {
+pow_fit = power.law.fit(fb_degree_list)
+return(pow_fit)
+}
+# Fit power law
+setwd('C:/Users/kevin/Google Drive/datasci/hw4/')
+if(interactive()) {
+logReset()
+basicConfig(level='DEBUG')
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+addHandler(writeToFile, file="~/hw5.log",level='FINEST')
+loginfo(paste('Starting HW5.'))
+fb_degree_list = get_fb_degree_list()
+fb_mean_degree = mean(fb_degree_list)
+logdebug(paste('Closing HW5.'))
+pow_fit = get_pow_fit(fb_degree_list)
+}
+#Kevin N
+#Assignment 5
+library(igraph)
+get_fb_degree_list = function() {
+# Load Facebook edge list
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+fb_edges = read.csv("facebook_edge_list.csv", stringsAsFactors=FALSE)
+fb_degree_list = table(c(fb_edges$Source))
+return (fb_degree_list)
+# Test Power law distribution
+#library(igraph)
+}
+createHist = function(fb_degree_list) {
+fb_hist = hist(fb_degree_list, breaks=50, freq=FALSE)
+}
+get_pow_fit = function(fb_degree_list) {
+pow_fit = power.law.fit(fb_degree_list)
+return(pow_fit)
+}
+# Fit power law
+setwd('C:/Users/kevin/Google Drive/datasci/hw4/')
+if(interactive()) {
+logReset()
+basicConfig(level='DEBUG')
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+addHandler(writeToFile, file="~/hw5.log",level='FINEST')
+loginfo(paste('Starting HW5.'))
+fb_degree_list = get_fb_degree_list()
+fb_mean_degree = mean(fb_degree_list)
+loginfo(paste("Mean",fb_mean_degree))
+loginfo(paste('Closing HW5.'))
+pow_fit = get_pow_fit(fb_degree_list)
+}
+#Mean
+#Kevin N
+#Assignment 5
+library(igraph)
+get_fb_degree_list = function() {
+# Load Facebook edge list
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+fb_edges = read.csv("facebook_edge_list.csv", stringsAsFactors=FALSE)
+fb_degree_list = table(c(fb_edges$Source))
+return (fb_degree_list)
+# Test Power law distribution
+#library(igraph)
+}
+createHist = function(fb_degree_list) {
+fb_hist = hist(fb_degree_list, breaks=50, freq=FALSE)
+}
+get_pow_fit = function(fb_degree_list) {
+pow_fit = power.law.fit(fb_degree_list)
+return(pow_fit)
+}
+# Fit power law
+setwd('C:/Users/kevin/Google Drive/datasci/hw4/')
+if(interactive()) {
+#Setup
+logReset()
+basicConfig(level='DEBUG')
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+addHandler(writeToFile, file="~/hw5.log",level='FINEST')
+loginfo(paste('Starting HW5.'))
+#Get degree list
+fb_degree_list = get_fb_degree_list()
+#Mean
+fb_mean_degree = mean(fb_degree_list)
+loginfo(paste("Mean of degrees=",fb_mean_degree))
+#Create hist
+createHist(fb_degree_list)
+#Power law fit
+pow_fit = get_pow_fit(fb_degree_list)
+loginfo(paste('Power law fit ', pow_fit))
+#Exit
+loginfo(paste('Closing HW5.'))
+}
+#Kevin N
+#Assignment 5
+library(igraph)
+get_fb_degree_list = function() {
+# Load Facebook edge list
+fb_edges = read.csv("facebook_edge_list.csv", stringsAsFactors=FALSE)
+fb_degree_list = table(c(fb_edges$Source))
+return (fb_degree_list)
+# Test Power law distribution
+#library(igraph)
+}
+createHist = function(fb_degree_list) {
+fb_hist = hist(fb_degree_list, breaks=50, freq=FALSE)
+}
+get_pow_fit = function(fb_degree_list) {
+pow_fit = power.law.fit(fb_degree_list)
+return(pow_fit)
+}
+# Fit power law
+setwd('C:/Users/kevin/Google Drive/datasci/hw4/')
+if(interactive()) {
+#Setup
+logReset()
+basicConfig(level='DEBUG')
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+addHandler(writeToFile, file="~/hw5.log",level='FINEST')
+loginfo(paste('Starting HW5.'))
+#Get degree list
+fb_degree_list = get_fb_degree_list()
+#Mean
+fb_mean_degree = mean(fb_degree_list)
+loginfo(paste("Mean of degrees=",fb_mean_degree))
+#Create hist
+createHist(fb_degree_list)
+#Power law fit
+pow_fit = get_pow_fit(fb_degree_list)
+loginfo(paste('Power law fit ', pow_fit))
+#Exit
+loginfo(paste('Closing HW5.'))
+}
+fb_edges = read.csv("facebook_edge_list.csv", stringsAsFactors=FALSE)
+fb_degree_list = table(c(fb_edges$Source))
+fb_degree_list
+fb_degree_list[1]
+fb_degree_list[10]
+##-----K-S Test-----
+norm1 = rnorm(100,mean=0,sd=1)
+norm2 = rnorm(100,mean=0,sd=1)
+plot(ecdf(norm1), col='blue')
+lines(ecdf(norm2), col='red')
+# Have to standardize the x-values
+x_seq = seq(-3,3,len=100)
+y_cdf1 = sapply(x_seq, function(x){
+sum(norm1<x)/length(norm1)
+})
+y_cdf2 = sapply(x_seq, function(x){
+sum(norm2<x)/length(norm1)
+})
+plot(x_seq,y_cdf1, col='blue', pch=16)
+points(x_seq,y_cdf2,col='red', pch=16)
+k_s_stat = max(abs(y_cdf1-y_cdf2))
+# where does it occur?
+k_index = which.max(abs(y_cdf1-y_cdf2))
+k_s_x = x_seq[k_index]
+# Add to plot
+lines(c(k_s_x,k_s_x), c(y_cdf1[k_index],y_cdf2[k_index]),
+col='black', lwd=2)
+# Create k-s statistic function
+ks_stat = function(x_min,x_max, dist_a, dist_b){
+x_seq = seq(x_min,x_max,len=1000)
+y_cdf1 = sapply(x_seq, function(x){
+sum(dist_a<x)/length(dist_a)
+})
+y_cdf2 = sapply(x_seq, function(x){
+sum(dist_b<x)/length(dist_b)
+})
+k_s_stat = max(abs(y_cdf1-y_cdf2))
+return(k_s_stat)
+}
+##----Repeat N Times-----
+N = 10000
+k_s_rep = sapply(1:100, function(i){
+dist_a = rnorm(100,mean=0,sd=1)
+dist_b = rnorm(100,mean=0,sd=1)
+return(ks_stat(-3, 3, dist_a, dist_b))
+})
+hist(k_s_rep, breaks=30, freq=FALSE)
+lines(density(k_s_rep))
+##----Empirical Two Tailed KS test-----
+# Alternative hypothesis is that the k-s- statistic
+#  is greater than the "expected value".
+dist1 = rnorm(1000, mean=0.05, sd = 1)
+dist2 = rnorm(1000, mean=0, sd = 1)
+# We hypothesize that dist2 is normal(0,1), like we know dist1 is.
+k_s_stat = ks_stat(-5,5, dist1, dist2)
+# What should the distribution be?
+# i.e. what is the expected value?
+k_s_hypothesis = sapply(1:500, function(i){
+dist_a = rnorm(1000,mean=0,sd=1)
+dist_b = rnorm(1000,mean=0,sd=1)
+return(ks_stat(-3, 3, dist_a, dist_b))
+})
+hist(k_s_hypothesis, breaks=30)
+empirical_p_value = sum(k_s_hypothesis>k_s_stat)/500
+k_s_stat
+?ks_stat
+1:100
+rnorm(1000, mean=0.05, sd = 1)
+rnorm(100,mean=0,sd=1)
+k_s_rep
+hist(k_s_rep, breaks=30, freq=FALSE)
+lines(density(k_s_rep))
+ks_stat(-3, 3, dist_a, dist_b)
+dist_a = rnorm(100,mean=0,sd=1)
+dist_b = rnorm(100,mean=0,sd=1)
+ks_stat(-3, 3, dist_a, dist_b)
+?ks.test
+ks.test(fb_degree_list)
+ks.test(fb_degree_list,"ppois")
+?fitdistr
+??fitdistr
+punif
+?punif
+ks.test(fb_degree_list,"punif")
+?ks.test
+#Kevin N
+#Assignment 5
+library(igraph)
+get_fb_degree_list = function() {
+# Load Facebook edge list
+fb_edges = read.csv("facebook_edge_list.csv", stringsAsFactors=FALSE)
+fb_degree_list = table(c(fb_edges$Source))
+return (fb_degree_list)
+# Test Power law distribution
+#library(igraph)
+}
+createHist = function(fb_degree_list) {
+fb_hist = hist(fb_degree_list, breaks=50, freq=FALSE)
+}
+# Fit power law
+get_pow_fit = function(fb_degree_list) {
+pow_fit = power.law.fit(fb_degree_list)
+return(pow_fit)
+}
+if(interactive()) {
+#Setup
+logReset()
+basicConfig(level='DEBUG')
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+addHandler(writeToFile, file="~/hw5.log",level='FINEST')
+loginfo(paste('Starting HW5.'))
+#Get degree list
+fb_degree_list = get_fb_degree_list()
+#Mean
+fb_mean_degree = mean(fb_degree_list)
+loginfo(paste("Mean of degrees=",fb_mean_degree))
+#Create hist
+createHist(fb_degree_list)
+#Test if the distribution of degrees is Poisson. (reuse K-S code) Just report the k-s distance from our code.
+ks_test = ks.test(fb_degree_list,"punif")
+loginfo(paste('Result of ks test', ks_test))
+#Test if the distribution of degrees is a Power Law. (Use igraph library)
+pow_fit = get_pow_fit(fb_degree_list)
+loginfo(paste('Power law fit', pow_fit))
+#Exit
+loginfo(paste('Closing HW5.'))
+}
+ks_test = ks.test(fb_degree_list,"punif")
+ks_test
+ks_test = ks.test(fb_degree_list,"punif")
+loginfo(paste('Result of ks test', ks_test))
+loginfo(paste('Result of ks test p value', ks_test$p.value))
+x<-runif(100,-1,1)
+x
+fb_degree_list
+ks_test = ks.test(fb_degree_list,"punif",0,3979)
+ks_test = ks.test(fb_degree_list,"punif",0,3979)
+loginfo(paste('Result of ks test. P value=', ks_test$p.value))
+ks_test = ks.test(fb_degree_list,"punif",10000,11111)
+loginfo(paste('Result of ks test. P value=', ks_test$p.value))
+pow_fit
+summary(pow_fit)
+?power.law.fit
+punif
+punif()
+pow_fit
+?power.law.fit
+pow_fit = get_pow_fit(fb_degree_list)
+loginfo(paste('Power law fit: reject null hypothesis', pow_fit))
+loginfo(paste('Data set is a power law fit: fail to reject null hypothesis. P value is', pow_fit$KS.p))
+loginfo(paste('Result of ks test says reject null hypothesis. P value=', ks_test$p.value))
+?ks.test
+#Kevin N
+#Assignment 5
+library(igraph)
+get_fb_degree_list = function() {
+# Load Facebook edge list
+fb_edges = read.csv("facebook_edge_list.csv", stringsAsFactors=FALSE)
+fb_degree_list = table(c(fb_edges$Source))
+return (fb_degree_list)
+}
+createHist = function(fb_degree_list) {
+fb_hist = hist(fb_degree_list, breaks=50, freq=FALSE)
+}
+# Fit power law
+get_pow_fit = function(fb_degree_list) {
+pow_fit = power.law.fit(fb_degree_list)
+return(pow_fit)
+}
+if(interactive()) {
+#Setup
+logReset()
+basicConfig(level='DEBUG')
+setwd('C:/Users/kevin/Google Drive/datasci/hw5/')
+addHandler(writeToFile, file="~/hw5.log",level='FINEST')
+loginfo(paste('Starting HW5.'))
+#Get degree list
+fb_degree_list = get_fb_degree_list()
+#Mean
+fb_mean_degree = mean(fb_degree_list)
+loginfo(paste("Mean of degrees=",fb_mean_degree))
+#Create hist
+createHist(fb_degree_list)
+#Test if the distribution of degrees is Poisson. (reuse K-S code) Just report the k-s distance from our code.
+ks_test = ks.test(fb_degree_list,"punif")
+loginfo(paste('Result of ks test says reject null hypothesis. Data is not from poisson distribution. P value=', ks_test$p.value))
+#Test if the distribution of degrees is a Power Law. (Use igraph library)
+pow_fit = get_pow_fit(fb_degree_list)
+loginfo(paste('Data set is a power law fit: fail to reject null hypothesis. P value is', pow_fit$KS.p))
+#Exit
+loginfo(paste('Closing HW5.'))
+}
+norm1 = rnorm(100,mean=0,sd=1)
+norm2 = rnorm(100,mean=0,sd=1)
+plot(ecdf(norm1), col='blue')
+lines(ecdf(norm2), col='red')
+# Have to standardize the x-values
+x_seq = seq(-3,3,len=100)
+y_cdf1 = sapply(x_seq, function(x){
+sum(norm1<x)/length(norm1)
+})
+y_cdf2 = sapply(x_seq, function(x){
+sum(norm2<x)/length(norm1)
+})
+plot(x_seq,y_cdf1, col='blue', pch=16)
+points(x_seq,y_cdf2,col='red', pch=16)
+?ks.test
+ks_test = ks.test(fb_degree_list,"poisson")
+distFit<-fitdistr(fb_degree_list,"Poisson")
+ks_test = ks.test(fb_degree_list,"ppois")
+distFit<-fitdistr(fb_degree_list,"Poisson")
+ks_test = ks.test(fb_degree_list,"ppois",lambda=distFit$estimate) #punif
+distFit <-fitdistr(fb_degree_list,"Poisson")
+?MASS
+require(MASS)
+distFit <-fitdistr(fb_degree_list,"Poisson")
+ks_test = ks.test(fb_degree_list,"ppois",lambda=distFit$estimate) #punif
+ks.test
+ks_test
+ks_test$statistic

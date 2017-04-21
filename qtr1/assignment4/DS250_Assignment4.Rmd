@@ -1,0 +1,227 @@
+---
+title: "DS250 - Introduction to Data Science"
+author: "Kevin Niemann"
+date: "October 27, 2015"
+output: html_document
+---
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
+```{r}
+rm( list = ls())  # Clear environment
+```
+
+# Assignment 4
+This assignment covers experiment study design, hypothesis development, common bias and error issues as well as simple predictive analytics using regression analysis and decision tries and a high level introduction to conditional probability using Bayes theorem.
+
+### The objectives of this assignment are:
+* Understand experiment types and design
+* Understand common errors and bias factors
+* Simple predictive analytics
+* Using R to create linear regression models
+
+***
+#### Question 1 - Experiment Design
+a) Briefly describe some common issues in experiment design:
+
+```
+Not having a representational sample, not performing a blind study, not having a valid control group for which to compare.
+
+```
+
+b)  In a new drug study using 40 mice (20m / 20f) where half would be treated and the other half are untreated. Also the procedure is complex and is limited to 4 mice per day. What would be the most efficient approach to assign the mice by group and day? 
+
+```
+Create a group each day, treating 2 m and 2 f,  and assign 2m and 2f untreated, for a total of 8 mice. Perform this four more times for five groups.
+```
+
+c) Briefly describe some of the difference between Experiment vs. Observational studies
+
+```
+An observational study is one that the researcher records data on what is observable and changing, without interfering with the results. An experiment involves applying a treatment to one group and drawing conclusions based on the differences between the two.
+```
+
+d) Create a simple experiment design for the following:
+
+
+>You are tasked to complete a study of Karaoke venue(s) and identify which factors in the singer performance are most highly correlated with audience applause volume levels. 
+
+I would determine a list of factors that I believe could influence applause volume levels. For each venue I would rate the venue/singer with a applause rating for each factor between 1-5. With that data, I could correlate applause volume to the factors.
+
+Review and complete the following questions:   
+1. What kind of study is this?  
+This is an observational study, I am not applying a treatment to any Karaoke venue.
+
+2. How will you select the significant factors?  
+This based on hypothesis.
+3. How many samples/subjects will you need?  
+I would use 100 samples.
+4. Briefly describe your experiment approach:  
+Based on the data collected in d) I would measure the correlation between applause volume and identified factors. Then rank the factors.
+
+
+***
+#### Question 2 - Experiment Error
+a) Briefly describe Type 1 experimental errors and provide two (2) examples.
+
+```
+Type 1 experimental error is the incorrect rejection of the null hypthesis (false positive). This might happen when screening for cancer or determining the effectiveness of a drug. Even though you don't have cancer and the drug doesn't work, the test rejects the null hypothesis.
+```
+
+b) Briefly describe a Type 2 error and provide two (2) examples:
+
+```
+Type 2 error is the failure to reject a null hypothesis (false negative). Conversely this would be a test incorrectly returning cancer-free or saying a drug doesn't work.
+```
+
+c) Choose and describe three (3) types of experimental bias:
+
+```
+Confirmation bias: The person running the study is looking to validate already existing beliefs, such as in 1d, the designer might select factors such as voice, clothing, without considering age etc.
+Selection bias: This is bias present in who is selected to participate in the study. For example, on a political poll calling only landlines between 9AM and 5PM.
+Normalcy bias: This is bias in that people don't typically expect a disaster or extreme situation. So they don't account for it as a possibility.
+```
+
+***
+#### Question 3 - Hypothesis Definition
+a) Review the following study description:
+
+>A renown doctor claims that 17 year olds have an average body temperature higher than the average (98.6 f). After conducting a random statistical sample of 25 17 year olds, the average temperature is found to be (98.9 f) with a standard deviation of 0.6 degrees f.
+Reviewed.
+b) Identify the hypothesis in this study:
+
+```
+The average body temperature of 17 year olds is above 98.6f.
+```
+
+c) Define the null hypothesis (H0) for this study:
+
+```
+The null hypothesis is that the average body temperature of 17 year olds is not different from the average.
+```
+
+d)  Identify any alternate hypothesis (Ha) applicable for this study:
+
+The alternate hypothesis is that average body temperature of 17 year olds is above 98.6f.
+
+
+***
+#### Question 4 - Causation
+For each of the following statements, assign a value from the list below:  
+  a. There are confounding variables  
+  b. It is unclear which variable is the cause and which is the effect  
+  c. It is unreasonable to generalize from the sample studied  
+  d. The variables actually measured are not related to the effect  
+  e. No plausible alternative explanation exists  
+
+
+1. A County inspector found that 35% of the sprinklers failed to activate under 7 pounds of pressure. However, the manufacturer maintains that the 7 psi threshold for passing or failing does not reflect typical water pressure in sprinkler systems.
+
+```
+e
+```
+
+2. Samoans have an increasing preference for violence as measured by the steadily increasing number of television sets being sold.
+
+```
+d
+```
+
+3. A new study suggests that women do not have the ability to be orchestra conductors since only a small percentage of orchestra conductors are women
+
+```
+c
+```
+
+***
+#### Question 5 - Regression
+a. Briefly describe the difference between linear and logistic regression:
+
+```
+ Linear regression is a model of the relationship between one dependent variable and one or more independent variables. The model has a numerical correlation between the variables. In Logistic regression, the dependent variable is a category of two values, such as Pass/Fail.
+```
+
+b. Review and run the following to create linear regression model:
+
+```{r,echo=TRUE}
+library(gamlss.data)
+data("usair")
+model.0 <- lm(y ~ x3, data = usair)
+summary(model.0)
+```
+
+c. From the prior data set, review and run the following code to create predicted values for the model
+
+```{r,echo=TRUE}
+usair$prediction <- predict(model.0)
+usair$residual   <- resid(model.0)
+```
+
+d. Modify the following plot to show the regression line from the pollution (y) over the population (x3). Add the residuals to show the difference between actual vs. predicted values.
+
+```{r,echo=TRUE}
+plot(y ~ x3, data = usair, cex.lab = 1.5)
+abline(model.0)
+
+```
+
+***
+#### Question 6 - Logistic Regression
+a. Using plot, review the following general linear model(glm):
+```{r,echo=TRUE}
+cuse <- read.table("http://data.princeton.edu/wws509/datasets/cuse.dat", header=TRUE)
+attach(cuse)
+lrfit <- glm(cbind(using, notUsing) ~  age + education + wantsMore
+            ,family = binomial)
+```
+
+***
+#### Question 7 - Decision Trees
+a. Review and run the following code:
+
+```{r,echo=TRUE}
+#install.packages("party")  # Install package if needed
+library(party)
+iris_ctree <- ctree(Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width, data=iris)
+```
+
+b. Using plot(), create a plot of the decision tree.
+
+```{r,echo=TRUE}
+plot(iris_ctree)
+```
+
+***
+#### Question 8 - Conditional Probability
+
+>A couple is planning their wedding at an outdoor ceremony. In recent years, it has rained only 10 days each year, however the weatherman has predicted rain for their wdding day.
+
+a. When it does rain, the weatherman correctly forecasts rain 90% of the time.  
+b. When it doesn't rain, the weatherman forecasts rain 10% of the time.  
+
+**What is the probability that it will rain on the day of the wedding?**
+
+P(A1) = 10/365 =0.027397
+P(A2) = 355/365 = 0.972602
+P(B|A1) = 0.9
+P(B|A2) = 0.1
+
+P(A1|B) =	(0.027397)(0.9) / ((0.027397)(0.9) + (0.972602)(0.1))
+P(A1|B) =	0.202245
+
+Probability is 20.2%.
+
+***
+#### Question 9 - Game Theory
+a) Review the following:
+
++ Alice and Bob are playing a game.  
++ There are two boxes, A and B, and Bob must choose only A or B.  
++ Alice secretly places either [three ($3) dollars in box A] or [two dollars ($2) in box B].  
++ Bob then chooses to open either A or B and gets to keep the contents of the box.  
++ If he chooses the empty box, Alice gets one dollar ($1).  
+
+**What should each player do to maximize their winnings?**
+Bob is going to pick box A just less than 50% of the time, so Alice always puts the money there. Alice will put the money in the box Bob picks less.
+
+#### **End**

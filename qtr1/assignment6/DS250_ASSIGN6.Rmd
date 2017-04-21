@@ -1,0 +1,283 @@
+---
+title: "DS250 - Introduction to Data Science"
+author: "Kevin Niemann"
+date: "November 10, 2015"
+output:  html_document
+---
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
+```{r}
+rm( list = ls())  # Clear environment
+```
+
+### Assignment 6 - Introduction to Machine Learning
+
+This assignment introduces the core concepts and tools used for automated prediction using Machine Learning. The concepts covered in this assignment include supervised and un-supervised learning algorithms, feature analysis, dimensionalality reduction, primary component analysis, statistical validation, and results evalution using ROC plots.
+
+#### The objectives of this assignment are:
+* Understand the types of machine learning
+* Evaluate and prepare test and training data
+* Define and adjust model parameters
+* Evaluate model performance
+
+***
+#### Question 1 - Machine Learning
+**a**\. Briefly describe three differences between Supervised and Unsupervised Machine Learning:
+
+````
+Supervised is learning by example. The algorithm needs to be shown a training set before it can predict whether a new data point is part of that set.
+Unsupervised is learning by categorizing data you've never seen before. By showing the algorithym different data sets, it will break these into classes without any prior knowledge.
+````
+
+**b**\. What does the term 'dimensionality reduction' mean? Describe some of the activities involved.
+
+
+````
+It is the process of reducing the number of variables under consideration. Some activities might include eliminating a column with too many missing values, or values that don't change often. 
+
+````
+
+**c**\. Describe some common approaches for identifying contributing variables:
+
+
+````
+Filter methods: Measure the feature by how it statistically impacts the dependent variable and keep or remove it.
+Wrapper methods: Tests different combinations of features as search problems and assigns a score to each based on accuracy.
+Embedded methods: Learn which features contribute to the accuracy of the model while it is being created.
+
+````
+
+***
+#### Question 2 - Machine Learning
+**a**\. Describe 'overfitting' and some approaches to address it.
+
+````
+Overfitting occurs when a model is trying to predict noise instead of the actual variable. Usually the training has been performed too long or there aren't enough training examples.
+````
+
+**b**\. Describe 'underfitting' and some of the approaches to address it.
+
+
+````
+Underfitting means that the model is too simple to describe the data it represents. It needs more training examples or longer time in training.
+
+````
+
+**c**\. What are 'training' and 'testing' data sets. Why can't a training data set be used to model evaluation?
+
+
+````
+
+Training set is used to build the model and provide it with information. The test set is used to validate the model functions correctly. Training set can't be used because the model already knows about that information.
+
+````
+
+***
+#### Question 3 - Linear Regression
+**a**\. Load sample data set: Temperature and Ice Cream sales
+
+````{r echo=TRUE}
+icecream <- data.frame(
+   temp=c(11.9, 14.2, 15.2, 16.4, 17.2, 18.1, 
+          18.5, 19.4, 22.1, 22.6, 23.4, 25.1),
+  units=c(185L, 215L, 332L, 325L, 408L, 421L, 
+          406L, 412L, 522L, 445L, 544L, 614L)
+  )
+````
+
+**b**\. Create a plot units of ice cream sold by temperature
+
+````{r echo=TRUE}
+plot(icecream)
+
+````
+
+**c**\. Create a regression model (*lm or glm*) for the **icecream** data set and print the model summary
+
+````{r echo=TRUE}
+icecreamfit <- lm(units ~ temp, data=icecream)
+summary(icecreamfit)
+
+````
+
+**d**\. Plot the **icecream** regression model including the confidence intervals
+
+````{r echo=TRUE}
+
+plot(units ~ temp, data=icecream, bty="n", lwd=2,
+     main="Ice cream Units Sold", col="#00526D", 
+     xlab="Temperature (Celsius)", 
+     ylab="Units sold")
+axis(side = 1, col="grey")
+axis(side = 2, col="grey")
+
+abline(icecreamfit)
+conf <- predict(icecreamfit, interval="confidence")
+lines(icecream$temp, conf[,2], lty=2)
+lines(icecream$temp, conf[,3], lty=2) 
+
+
+
+````
+***
+#### Question 4 - Binomial Regression
+**a**\. Load sample data set: (http://www.ats.ucla.edu/stat/data/binary.csv)
+
+````{r echo=TRUE}
+students <- read.csv("http://www.ats.ucla.edu/stat/data/binary.csv")
+````
+
+**b**\. Create a logistic regression model using (*glm*) for student admissions
+
+````{r echo=TRUE}
+fit = glm(admit~ gre+gpa+rank, family=binomial, data=students)
+summary(fit)
+````
+
+**c**\. Plot the student regression model including confidence intervals
+
+````{r echo=TRUE}
+
+plot(fit)
+
+
+````
+
+***
+#### Question 5 - Supervised Learning
+**a**\. Using R, classify two data sets using kNN (Nearest Neighbor):
+
+````{r echo=TRUE}
+library(class)    #k-nearest neighbors
+
+library(kknn)     #weighted k-nearest neighbors
+# Class A
+A1=c(0,0)
+A2=c(1,1)
+A3=c(2,2)
+
+# Class B
+B1=c(6,6)
+B2=c(5.5,7)
+B3=c(6.5,5)
+
+train=rbind(A1,A2,A3, B1,B2,B3)
+
+
+
+````
+
+**b**\. From the model in **a**, test the kNN model against a different test value:
+
+> test=c(3.5, 3.5) # is this an A or B?
+
+
+````{r echo=TRUE}
+test=c(3.5, 3.5)
+cl=factor(c(rep("A",3),rep("B",3)))
+summary(knn(train, test, cl, k = 1))
+
+
+
+````
+It belongs to group A.
+
+
+**c**\. Create a scatter plot showing the A and B class objects and the test objects.
+
+
+````{r echo=TRUE}
+traintest=rbind(train, test)
+plot(traintest, xlab="X", ylab="Y")
+
+````
+
+***
+#### Question 6 - Cluster Analysis
+**a**\. Identify the number of clusters in the following data and plot the data points.
+
+````{r echo=TRUE}
+n = 1000
+g = 6
+set.seed(g)
+d <- data.frame(x = unlist(lapply(1:g, function(i) rnorm(n/g, runif(1)*i^2))),
+                y = unlist(lapply(1:g, function(i) rnorm(n/g, runif(1)*i^2))))
+plot(d)
+````
+There are four clusters.
+
+**b**\. Exploratory Data Analysis  - Create scatterplot showing cluster distribution
+
+````{r echo=TRUE}
+plot(d, type = "p", col="blue", xlim=c(-5,30), ylim=c(-5,20),
+main="Initial Cluster Data", xlab="X", ylab="Y")
+````
+
+**c**\. Cluster Analysis - Calculate the 'Within Groups Sum of Squares' to estimate optimal 'K'
+
+````
+NbClust(d, min.nc=2, max.nc=15, method="kmeans")
+Optiomal k = 3
+
+
+````
+
+**d**\. Model - Create K-Means model and display fit results.
+
+````{r echo=TRUE}
+set.seed(1234)
+km=kmeans(d,3,nstart=25)
+table(km$cluster)
+
+````
+
+***
+#### Question 7 - Cluster Analysis
+**a**\. Retrieve sample data from: (http://archive.ics.uci.edu/ml/machine-learning-databases/wine)
+
+````{r echo=TRUE}
+wine.data <- read.csv("http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data")
+
+colnames(wine.data) <- c("Region", "Alcohol", "Malic Acid", "Ash","Alcalinity", "Magnesium", "Total Phenols","Flavanoids", "Nonflavanoid Phenols","Proanthocyanins", "Color", "Hue","OD280/OD315", "Proline")
+````
+
+**b**\. Cluster Analysis - Determine optimal number of clusters
+
+```{r}
+library(NbClust)  
+NbClust(wine.data, min.nc=2, max.nc=15, method="kmeans")
+
+
+````
+Two clusters
+
+**c**\. Evaluate model fit results
+
+```{r}
+set.seed(1234)
+km=kmeans(wine.data,2,nstart=25)
+table(km$cluster)
+````
+
+#### Evaluate clusters
+
+```{r}
+km$centers
+```
+
+```{r}
+wine.data$km_cluster = km$cluster
+
+boxplot(Alcohol~km_cluster, data=wine.data, main="Alcohol Content, K-Means")
+````
+
+***
+#### BONUS Question (Optional)
+**a**\. Using the Group Lens Movie data set (ML100k), create a recommendation model that takes a single movie name input and returns a list of ten (10) recommended movies names. (http://www.grouplens.org/system/files/ml-100k.zip)
+
+```{r}
+
+````
+
+#### **End**
